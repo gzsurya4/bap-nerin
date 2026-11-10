@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5B7CF5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>BAP Ujian</title>
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BAP%20Ujian%22%2C%22short_name%22%3A%22BAP%20Ujian%22%2C%22description%22%3A%22Berita%20Acara%20Pelaksanaan%20Ujian%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F3F6FD%22%2C%22theme_color%22%3A%22%235B7CF5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D'http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg'%2520viewBox%253D'0%25200%2520512%2520512'%253E%253Crect%2520width%253D'512'%2520height%253D'512'%2520rx%253D'112'%2520fill%253D'%25235B7CF5'%252F%253E%253Crect%2520x%253D'150'%2520y%253D'120'%2520width%253D'212'%2520height%253D'280'%2520rx%253D'40'%2520fill%253D'none'%2520stroke%253D'%2523fff'%2520stroke-width%253D'26'%252F%253E%253Cpath%2520d%253D'M205%2520120v-16h102v16'%2520stroke%253D'%2523fff'%2520stroke-width%253D'26'%2520fill%253D'none'%252F%253E%253Cpath%2520d%253D'm208%2520262%252034%252034%252062-70'%2520stroke%253D'%2523FF8A8F'%2520stroke-width%253D'30'%2520fill%253D'none'%2520stroke-linecap%253D'round'%2520stroke-linejoin%253D'round'%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%3E%3Crect%20width%3D'512'%20height%3D'512'%20rx%3D'112'%20fill%3D'%235B7CF5'%2F%3E%3Crect%20x%3D'150'%20y%3D'120'%20width%3D'212'%20height%3D'280'%20rx%3D'40'%20fill%3D'none'%20stroke%3D'%23fff'%20stroke-width%3D'26'%2F%3E%3Cpath%20d%3D'M205%20120v-16h102v16'%20stroke%3D'%23fff'%20stroke-width%3D'26'%20fill%3D'none'%2F%3E%3Cpath%20d%3D'm208%20262%2034%2034%2062-70'%20stroke%3D'%23FF8A8F'%20stroke-width%3D'30'%20fill%3D'none'%20stroke-linecap%3D'round'%20stroke-linejoin%3D'round'%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6FD;--sf:#fff;--pri:#5B7CF5;--prid:#3B3F94;--peri:#8F94E0;--coral:#FF8A8F;--ink:#1E2250;--mut:#8A90B2;--line:#E3E8F5;--ok:#16A34A;--okb:#DCFCE7;--warn:#B45309;--warnb:#FEF3C7;--bad:#DC2626;--badb:#FEE2E2;--sh:0 6px 22px rgba(59,63,148,.08);--sh2:0 10px 28px rgba(91,124,245,.38)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#fff}
+body{font:14px/1.5 'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+button:disabled{cursor:not-allowed;opacity:.55}
+small{font-size:12px;color:var(--mut)}
+.mut{color:var(--mut)}
+.ic{flex:none}
+#bap-root{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.pbanner{background:#FFF4D6;color:#8A5A00;text-align:center;font-size:12px;font-weight:600;padding:6px 10px}
+.shell{flex:1;display:flex;min-height:0}
+.side{width:252px;background:#fff;border-right:1px solid var(--line);padding:20px 14px;display:none;flex-direction:column;gap:4px}
+.sbrand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px}
+.sbrand b{display:block;font-size:16px;line-height:1.2}
+.sn{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;font-weight:600;color:var(--mut);text-align:left;width:100%}
+.sn:hover{background:#F3F6FD}
+.sn.on{background:var(--pri);color:#fff;box-shadow:0 6px 16px rgba(91,124,245,.3)}
+.sfoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:14px}
+.uchip{display:flex;align-items:center;gap:10px;padding:4px 8px}
+.uchip b{display:block;font-size:13px;line-height:1.2}
+.av{width:36px;height:36px;border-radius:12px;background:var(--peri);color:#fff;display:grid;place-items:center;font-weight:700}
+.main{flex:1;overflow-y:auto;padding:18px 16px 130px}
+.wrap{max-width:980px;margin:0 auto}
+.bnav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));height:64px;display:flex;align-items:center;justify-content:space-around;background:rgba(255,255,255,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 10px 30px rgba(59,63,148,.18);z-index:30}
+.bnav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:600;color:var(--mut);padding:6px 0}
+.bnav button.on{color:var(--pri)}
+.bnav .fab{flex:0 0 58px;width:58px;height:58px;margin-top:-32px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;box-shadow:var(--sh2);border:4px solid var(--bg);padding:0}
+@media(min-width:900px){.side{display:flex}.bnav{display:none}.main{padding:30px 38px 50px}}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.ph h1{font-size:22px;font-weight:800;line-height:1.25}
+.ph p{color:var(--mut);font-size:13px}
+.sec{font-size:14px;font-weight:700;margin:20px 0 10px}
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:var(--sh);margin-bottom:12px;border:1px solid rgba(227,232,245,.7)}
+.li{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.li.col{align-items:flex-start}
+.lm{min-width:0;display:flex;flex-direction:column}
+.lm b{font-weight:700;overflow-wrap:anywhere}
+.lm small{overflow-wrap:anywhere}
+.rt{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none}
+.acts{display:flex;gap:4px}
+.ib{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:var(--mut);background:#F3F6FD}
+.ib:hover{color:var(--pri)}
+.ib.bad:hover{color:var(--bad)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:14px;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn.pri{background:var(--pri);color:#fff;border-color:var(--pri);box-shadow:0 6px 16px rgba(91,124,245,.28)}
+.btn.ghost{background:#EEF2FF;border-color:#EEF2FF;color:var(--pri)}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.block{width:100%;padding:13px}
+.btn:active:not(:disabled),.ib:active,.bnav button:active{transform:scale(.96)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;background:#EEF2FF;color:var(--pri);white-space:nowrap}
+.chip.ok{background:var(--okb);color:var(--ok)}
+.chip.warn{background:var(--warnb);color:var(--warn)}
+.chip.coral{background:#FFE4E6;color:#E11D48}
+.chip.pri button{display:grid;place-items:center;color:var(--pri)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chips .chip{font-size:12px;padding:5px 10px}
+.tabs{display:flex;gap:4px;background:#fff;padding:4px;border-radius:14px;border:1px solid var(--line);margin-bottom:14px}
+.tabs.scroll{overflow-x:auto}
+.tabs button{flex:1;padding:9px 14px;border-radius:11px;font-weight:700;color:var(--mut);white-space:nowrap}
+.tabs button.on{background:var(--pri);color:#fff}
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search{flex:1;min-width:150px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:0 12px;color:var(--mut)}
+.search input{flex:1;border:0;outline:0;padding:11px 0;background:none;color:var(--ink);min-width:0}
+.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.fld>span{font-size:12px;font-weight:700;color:var(--mut)}
+.fld input,.fld select,.fld textarea,select.sel,.toolbar select{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:0}
+.toolbar select{width:auto}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(91,124,245,.15)}
+.fld input:disabled,.fld select:disabled,.fld textarea:disabled{background:#F6F8FD;color:var(--mut)}
+.g2{display:grid;gap:0 14px;grid-template-columns:1fr}
+@media(min-width:640px){.g2{grid-template-columns:1fr 1fr}.g2 .full{grid-column:1/-1}}
+.chk{display:flex;flex-wrap:wrap;gap:8px}
+.chkit{display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:12px;font-weight:600}
+.chkit input{width:auto}
+.err{background:var(--badb);color:var(--bad);padding:10px 12px;border-radius:12px;margin-bottom:12px;font-weight:600;font-size:13px}
+.note{padding:10px 14px;border-radius:14px;margin-bottom:12px;font-weight:600;font-size:13px}
+.note.ok{background:var(--okb);color:var(--ok)}
+.note.info{background:#EEF2FF;color:var(--prid)}
+.empty{text-align:center;padding:34px 16px;color:var(--mut);background:#fff;border-radius:18px;border:1px dashed var(--line)}
+.pad{padding:12px 0}
+.cnt{font-size:12px;margin-bottom:8px}
+.hero{background:linear-gradient(120deg,#5B7CF5 0%,#8F94E0 55%,#FF8A8F 130%);color:#fff;border-radius:22px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;box-shadow:var(--sh2)}
+.hero small{color:rgba(255,255,255,.85)}
+.hero h2{font-size:20px;font-weight:800;margin:2px 0}
+.hero p{font-size:13px;opacity:.92}
+.ring{position:relative;width:72px;height:72px;flex:none}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.stat{background:#fff;border-radius:16px;padding:12px;text-align:left;box-shadow:var(--sh)}
+.stat small{display:block}
+.stat b{font-size:24px;font-weight:800;line-height:1.2}
+.stat i{display:block;height:3px;border-radius:3px;margin-top:6px;background:var(--pri)}
+.tgrid{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:640px){.tgrid{grid-template-columns:1fr 1fr}}
+.tile{border-radius:20px;padding:16px;color:#fff;display:flex;flex-direction:column;gap:6px;box-shadow:var(--sh)}
+.tile h4{font-size:16px;font-weight:800}
+.tile small{color:rgba(255,255,255,.88)}
+.tile .tf{display:flex;justify-content:space-between;align-items:center;margin-top:8px;background:rgba(255,255,255,.18);border-radius:12px;padding:8px 10px;gap:8px}
+.tile .btn{padding:7px 12px;border-radius:10px;font-size:12px;background:#fff;color:var(--prid);border:0;box-shadow:none}
+.t0{background:linear-gradient(135deg,#7C98FA,#5B7CF5)}.t1{background:linear-gradient(135deg,#4A4FB0,#3B3F94)}.t2{background:linear-gradient(135deg,#A9ADEB,#8F94E0)}.t3{background:linear-gradient(135deg,#FF9EA2,#FF8A8F)}
+.grp{padding:0;overflow:hidden}
+.gh{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#F6F8FF;border-bottom:1px solid var(--line)}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 16px;border-bottom:1px solid #F0F3FA}
+.srow:last-child{border-bottom:0}
+.sno{width:22px;color:var(--mut);font-size:12px;font-weight:700}
+.sinfo{flex:1;min-width:120px;display:flex;flex-direction:column}
+.sinfo b{font-weight:600;line-height:1.3}
+.seg{display:flex;gap:4px}
+.seg button{width:36px;height:36px;border-radius:11px;background:#F0F3FC;font-weight:800;color:var(--mut)}
+.seg button.on.H{background:var(--ok);color:#fff}
+.seg button.on.S{background:#F59E0B;color:#fff}
+.seg button.on.I{background:var(--pri);color:#fff}
+.seg button.on.A{background:var(--bad);color:#fff}
+.sket{flex-basis:100%;margin-left:32px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);outline:0;font-size:13px;width:calc(100% - 32px)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}
+.bar .btn{flex:1;min-width:130px}
+.login{min-height:100%;display:grid;place-items:center;padding:24px 16px;overflow-y:auto;background:radial-gradient(circle at 15% 10%,#DCE5FF 0,transparent 45%),radial-gradient(circle at 90% 90%,#FFE1E3 0,transparent 40%),var(--bg)}
+.lcard{width:100%;max-width:400px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-radius:26px;padding:26px 22px;box-shadow:0 20px 50px rgba(59,63,148,.16);border:1px solid #fff}
+.lbrand{text-align:center;margin-bottom:18px}
+.lbrand h1{font-size:22px;font-weight:800;margin-top:10px}
+.lbrand p{color:var(--mut);font-size:13px}
+.demo{margin-top:16px;padding:12px;border-radius:14px;background:#FFF7E0;color:#8A5A00;font-size:12px;line-height:1.6}
+.mback{position:fixed;inset:0;z-index:2147483100;background:rgba(30,34,80,.45);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#fff;width:100%;max-width:560px;max-height:92vh;display:flex;flex-direction:column;border-radius:24px 24px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.2);animation:up .2s ease-out}
+@media(min-width:700px){.mback{align-items:center}.modal{border-radius:24px}}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 14px 20px;border-bottom:1px solid var(--line)}
+.mh h3{font-size:16px}
+.mb{padding:18px 20px 22px;overflow-y:auto}
+.mf{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 10px;font-size:13px;margin-bottom:12px}
+.kv span:nth-child(odd){color:var(--mut);font-weight:600}
+.dtab{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.dtab th,.dtab td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+#bap-toast{position:fixed;left:0;right:0;bottom:calc(92px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:2147483200;pointer-events:none;padding:0 16px}
+@media(min-width:900px){#bap-toast{bottom:28px}}
+.toast{background:var(--prid);color:#fff;padding:11px 18px;border-radius:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:up .2s ease-out;max-width:460px}
+.toast.err{background:var(--bad)}
+#bap-load{position:fixed;inset:0;z-index:2147483300;background:rgba(255,255,255,.55);display:grid;place-items:center}
+#bap-load[hidden]{display:none}
+.spin{width:38px;height:38px;border:4px solid #DCE3FA;border-top-color:var(--pri);border-radius:50%;animation:rot .7s linear infinite}
+.logoprev{width:64px;height:64px;border-radius:14px;border:1px dashed var(--line);display:grid;place-items:center;overflow:hidden;background:#fff;color:var(--mut);font-size:11px}
+.logoprev img{max-width:100%;max-height:100%}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes up{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+@media print{#bap-root{display:none}}
+</style>
+</head>
+<body>
+<div id="bap-root"></div>
+<div id="bap-modal"></div>
+<div id="bap-toast"></div>
+<div id="bap-load" hidden><div class="spin"></div></div>
+<script type="module">
+// KONFIGURASI APLIKASI
+const IS_PREVIEW = false; // Ubah menjadi false SAAT DEPLOY / PUBLISH agar terhubung murni ke Firebase tanpa data dummy
+
+// PASTE FIREBASE CONFIG ANDA DI SINI
+const firebaseConfig = {
+  apiKey: "AIzaSyA_vMn4don5MUHWREBz31wA436X83V0a6Q",
+  authDomain: "bap-nerin.firebaseapp.com",
+  projectId: "bap-nerin",
+  storageBucket: "bap-nerin.firebasestorage.app",
+  messagingSenderId: "760333460613",
+  appId: "1:760333460613:web:da2b02f5580ce7d77735ec"
+};
+
+const FB_VER = '10.12.2';
+const JSPDF = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const ATBL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js';
+
+/* ================= UTIL ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const HARI = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const LBL = { H: 'Hadir', S: 'Sakit', I: 'Izin', A: 'Alpa' };
+const pad = n => String(n).padStart(2, '0');
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const parseD = s => { const [y, m, d] = String(s).split('-').map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+const fmtTgl = s => { const d = parseD(s); return `${d.getDate()} ${BULAN[d.getMonth()]} ${d.getFullYear()}`; };
+const hariTgl = s => `${HARI[parseD(s).getDay()]}, ${fmtTgl(s)}`;
+const byName = (a, b) => String(a).localeCompare(String(b), 'id', { numeric: true });
+const initial = n => (String(n || '?').trim()[0] || '?').toUpperCase();
+const b64 = u8 => btoa(String.fromCharCode(...u8));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => 'x' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const safeName = s => String(s).replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
+
+const ICONS = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  calendar: '<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/>',
+  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  sliders: '<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  download: '<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>',
+  upload: '<path d="M12 15V3M7 8l5-5 5 5M4 21h16"/>',
+  trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 11v6M14 11v6"/>',
+  edit: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  unlock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>',
+  back: '<path d="M15 6l-6 6 6 6"/>',
+  check: '<path d="m5 12 5 5 9-10"/>'
+};
+const ic = (n, s = 20) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+const brandMark = (z = 44) => `<svg width="${z}" height="${z}" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C98FA"/><stop offset="1" stop-color="#3B3F94"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#bg1)"/><rect x="14" y="11" width="20" height="26" rx="4" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M19 11V9.5h10V11" stroke="#fff" stroke-width="2.4" fill="none"/><path d="m19.5 24 3.2 3.2 5.8-6.4" stroke="#FF8A8F" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/* ================= STATE ================= */
+const S = {
+  user: null, page: '',
+  data: { settings: {}, mapel: [], ruang: [], kelas: [], siswa: [], pengawas: [], jadwal: [], bap: [] },
+  siswaLoaded: false, form: null, modal: null,
+  ui: { ltab: 'pengawas', mtab: 'mapel', msearch: '', mkelas: '', jmode: 'upcoming', rf: { dari: '', sampai: '', ruang: '', mapel: '', status: '', q: '' }, logoTmp: null, cfgErr: '' }
+};
+let fb = null;
+const MEM = {}; // hanya dipakai saat IS_PREVIEW = true
+
+/* ================= DATA LAYER ================= */
+const clean = o => { const c = JSON.parse(JSON.stringify(o)); delete c.id; return c; };
+const DB = {
+  async list(col, fl = []) {
+    if (IS_PREVIEW) return Object.entries(MEM[col] || {}).map(([id, d]) => ({ ...clone(d), id })).filter(r => fl.every(([f, , v]) => r[f] === v));
+    const { fs, db } = fb;
+    const s = await fs.getDocs(fs.query(fs.collection(db, col), ...fl.map(([f, o, v]) => fs.where(f, o, v))));
+    return s.docs.map(d => ({ ...d.data(), id: d.id }));
+  },
+  async get(col, id) {
+    if (IS_PREVIEW) { const d = (MEM[col] || {})[id]; return d ? { ...clone(d), id } : null; }
+    const { fs, db } = fb; const s = await fs.getDoc(fs.doc(db, col, id));
+    return s.exists() ? { ...s.data(), id: s.id } : null;
+  },
+  async set(col, id, data) {
+    const c = clean(data);
+    if (IS_PREVIEW) { (MEM[col] = MEM[col] || {})[id] = c; return id; }
+    await fb.fs.setDoc(fb.fs.doc(fb.db, col, id), c); return id;
+  },
+  async add(col, data) {
+    const id = IS_PREVIEW ? uid() : fb.fs.doc(fb.fs.collection(fb.db, col)).id;
+    return DB.set(col, id, data);
+  },
+  async update(col, id, data) {
+    const c = clean(data);
+    if (IS_PREVIEW) { Object.assign(MEM[col][id], c); return; }
+    await fb.fs.updateDoc(fb.fs.doc(fb.db, col, id), c);
+  },
+  async del(col, id) {
+    if (IS_PREVIEW) { delete MEM[col][id]; return; }
+    await fb.fs.deleteDoc(fb.fs.doc(fb.db, col, id));
+  },
+  async setMany(col, items) {
+    const ids = [];
+    if (IS_PREVIEW) { for (const it of items) ids.push(await DB.set(col, it.id || uid(), it.data)); return ids; }
+    const { fs, db } = fb;
+    for (let i = 0; i < items.length; i += 400) {
+      const b = fs.writeBatch(db);
+      items.slice(i, i + 400).forEach(it => { const ref = it.id ? fs.doc(db, col, it.id) : fs.doc(fs.collection(db, col)); ids.push(ref.id); b.set(ref, clean(it.data)); });
+      await b.commit();
+    }
+    return ids;
+  }
+};
+
+async function initFirebase() {
+  const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+  const [appM, authM, fsM] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js')]);
+  const app = appM.initializeApp(firebaseConfig);
+  const auth = authM.getAuth(app);
+  await authM.setPersistence(auth, authM.browserSessionPersistence);
+  fb = { app, auth, authM, fs: fsM, db: fsM.getFirestore(app) };
+}
+
+/* ================= AUTH ================= */
+async function hashPw(pw, salt) {
+  if (!(window.crypto && crypto.subtle)) throw new Error('Browser tidak mendukung enkripsi. Buka aplikasi lewat HTTPS.');
+  const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(salt), iterations: 120000 }, k, 256);
+  return b64(new Uint8Array(bits));
+}
+const newSalt = () => b64(crypto.getRandomValues(new Uint8Array(16)));
+
+async function loginAdmin(email, pw) {
+  email = String(email || '').trim();
+  if (IS_PREVIEW) {
+    if (email.toLowerCase() === 'admin@demo.sch' && pw === 'admin123') { S.user = { role: 'admin', id: 'demo', nama: 'Admin Demo', email }; return; }
+    throw new Error('Email atau password salah.');
+  }
+  const c = await fb.authM.signInWithEmailAndPassword(fb.auth, email, pw);
+  S.user = { role: 'admin', id: c.user.uid, nama: c.user.displayName || c.user.email, email: c.user.email };
+}
+async function loginPengawas(username, pw) {
+  const id = String(username || '').trim().toLowerCase();
+  if (!id || !pw) throw new Error('Isi username dan password.');
+  if (!/^[a-z0-9._-]{3,30}$/.test(id)) throw new Error('Username atau password salah.');
+  const acc = await DB.get('pengawas', id);
+  if (!acc || acc.aktif === false || !acc.salt) throw new Error('Username atau password salah.');
+  const h = await hashPw(pw, acc.salt);
+  if (h !== acc.hash) throw new Error('Username atau password salah.');
+  S.user = { role: 'pengawas', id, nama: acc.nama, nip: acc.nip || '' };
+}
+const authMsg = e => {
+  const c = e && e.code ? e.code : '';
+  if (/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)) return 'Email atau password salah.';
+  if (/too-many/.test(c)) return 'Terlalu banyak percobaan. Coba lagi beberapa menit lagi.';
+  if (/network/.test(c)) return 'Tidak ada koneksi internet.';
+  if (/permission-denied/.test(String(e && e.message))) return 'Akses ditolak oleh Security Rules Firestore. Periksa pengaturan rules.';
+  return (e && e.message) || 'Terjadi kesalahan.';
+};
+async function logout() {
+  if (!IS_PREVIEW && S.user && S.user.role === 'admin' && fb) { try { await fb.authM.signOut(fb.auth); } catch (e) { /* abaikan */ } }
+  S.user = null; S.form = null; S.page = ''; S.siswaLoaded = false;
+  S.data = { settings: {}, mapel: [], ruang: [], kelas: [], siswa: [], pengawas: [], jadwal: [], bap: [] };
+  closeModal(); render();
+}
+
+/* ================= LOAD ================= */
+function sortData() {
+  const D = S.data;
+  D.mapel.sort((a, b) => byName(a.nama, b.nama));
+  D.ruang.sort((a, b) => byName(a.nama, b.nama));
+  D.kelas.sort((a, b) => byName(a.nama, b.nama));
+  D.siswa.sort((a, b) => byName(a.kelas + ' ' + a.nama, b.kelas + ' ' + b.nama));
+  D.pengawas.sort((a, b) => byName(a.nama, b.nama));
+  D.jadwal.sort((a, b) => (a.tanggal + (a.jamMulai || '')).localeCompare(b.tanggal + (b.jamMulai || '')));
+  D.bap.sort((a, b) => (b.tanggal + (b.mulai || '')).localeCompare(a.tanggal + (a.mulai || '')));
+}
+async function loadData() {
+  const D = S.data, u = S.user;
+  const jobs = [
+    DB.get('settings', 'sekolah').then(r => { D.settings = r || {}; }),
+    DB.list('mapel').then(r => { D.mapel = r; }),
+    DB.list('ruang').then(r => { D.ruang = r; }),
+    DB.list('kelas').then(r => { D.kelas = r; })
+  ];
+  if (u.role === 'admin') {
+    jobs.push(DB.list('pengawas').then(r => { D.pengawas = r; }), DB.list('jadwal').then(r => { D.jadwal = r; }), DB.list('bap').then(r => { D.bap = r; }));
+  } else {
+    jobs.push(DB.list('jadwal', [['pengawasId', '==', u.id]]).then(r => { D.jadwal = r; }), DB.list('bap', [['pengawasId', '==', u.id]]).then(r => { D.bap = r; }));
+  }
+  await Promise.all(jobs);
+  sortData();
+}
+async function ensureSiswa() {
+  if (S.siswaLoaded) return;
+  await withLoad(async () => { S.data.siswa = await DB.list('siswa'); S.siswaLoaded = true; sortData(); });
+}
+function upsertLocal(col, rec) {
+  const a = S.data[col], i = a.findIndex(x => x.id === rec.id);
+  if (i >= 0) a[i] = rec; else a.push(rec);
+  sortData();
+}
+const bapMap = () => Object.fromEntries(S.data.bap.map(b => [b.id, b]));
+async function withLoad(fn) {
+  const el = $('#bap-load'); el.hidden = false;
+  try { return await fn(); } finally { el.hidden = true; }
+}
+
+/* ================= UI HELPERS ================= */
+let toastT;
+function toast(m, t = 'ok') { const el = $('#bap-toast'); el.innerHTML = `<div class="toast ${t}">${esc(m)}</div>`; clearTimeout(toastT); toastT = setTimeout(() => { el.innerHTML = ''; }, 3400); }
+function openModal(title, body, o = {}) {
+  S.modal = o;
+  $('#bap-modal').innerHTML = `<div class="mback" data-act="mclose-bg"><div class="modal" role="dialog" aria-modal="true"><div class="mh"><h3>${esc(title)}</h3><button class="ib" data-act="mclose" aria-label="Tutup">${ic('x')}</button></div><div class="mb">${body}</div></div></div>`;
+}
+function closeModal() { S.modal = null; $('#bap-modal').innerHTML = ''; }
+const mfoot = (label = 'Simpan') => `<div class="mf"><button type="button" class="btn" data-act="mclose">Batal</button><button type="submit" class="btn pri">${esc(label)}</button></div>`;
+function confirmBox(msg, ok, label = 'Ya, lanjutkan') {
+  openModal('Konfirmasi', `<p style="margin-bottom:16px">${esc(msg)}</p><div class="mf"><button class="btn" data-act="mclose">Batal</button><button class="btn pri" data-act="mok">${esc(label)}</button></div>`, { ok });
+}
+const fld = (label, name, val = '', o = {}) => {
+  const attr = `${o.req ? 'required' : ''} ${o.attr || ''}`;
+  const inner = o.type === 'textarea'
+    ? `<textarea name="${name}" rows="${o.rows || 3}" ${attr}>${esc(val)}</textarea>`
+    : `<input name="${name}" type="${o.type || 'text'}" value="${esc(val)}" ${o.ph ? `placeholder="${esc(o.ph)}"` : ''} ${attr}>`;
+  return `<label class="fld ${o.cls || ''}"><span>${esc(label)}</span>${inner}</label>`;
+};
+const sel = (label, name, options, val, o = {}) => `<label class="fld ${o.cls || ''}"><span>${esc(label)}</span><select name="${name}" ${o.req ? 'required' : ''} ${o.attr || ''}>${o.noblank ? '' : `<option value="">${esc(typeof o.blank === 'string' ? o.blank : '— Pilih —')}</option>`}${options.map(([v, t]) => `<option value="${esc(v)}" ${String(v) === String(val) ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select></label>`;
+const head = (t, s = '', extra = '') => `<div class="ph"><div><h1>${esc(t)}</h1>${s ? `<p>${esc(s)}</p>` : ''}</div>${extra}</div>`;
+const empty = m => `<div class="empty">${esc(m)}</div>`;
+const stChip = b => !b ? '<span class="chip coral">Belum diisi</span>' : b.status === 'final' ? '<span class="chip ok">Final</span>' : '<span class="chip warn">Draf</span>';
+const ring = pct => { const r = 30, c = 2 * Math.PI * r; return `<div class="ring"><svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="${r}" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="7"/><circle cx="36" cy="36" r="${r}" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * pct / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 36 36)"/></svg><b>${pct}%</b></div>`; };
+const jRow = (j, bm, acts = '') => `<div class="card li"><div class="lm"><b>${esc(j.mapelNama)}</b><small>${esc(j.ruangNama)} · ${esc(j.jamMulai)}–${esc(j.jamSelesai)}</small><small>${esc(j.pengawasNama)}${j.pengawas2 ? ' &amp; ' + esc(j.pengawas2) : ''}</small></div><div class="rt">${stChip(bm[j.id])}${acts}</div></div>`;
+
+/* ================= VIEWS ================= */
+const NAV = {
+  admin: [['dash', 'Dashboard', 'home'], ['master', 'Data Master', 'layers'], ['jadwal', 'Jadwal Ujian', 'calendar'], ['rekap', 'Rekap BAP', 'file'], ['set', 'Pengaturan', 'sliders']],
+  pengawas: [['home', 'Beranda', 'home'], ['bap', 'Isi BAP', 'plus'], ['riwayat', 'Riwayat BAP', 'file'], ['akun', 'Akun', 'user']]
+};
+const VIEWS = {};
+
+function viewLogin() {
+  const adm = S.ui.ltab === 'admin';
+  return `<div class="login"><div class="lcard"><div class="lbrand">${brandMark(54)}<h1>BAP Ujian</h1><p>Berita Acara Pelaksanaan Ujian</p></div>
+  <div class="tabs"><button class="${!adm ? 'on' : ''}" data-act="ltab" data-v="pengawas">Pengawas</button><button class="${adm ? 'on' : ''}" data-act="ltab" data-v="admin">Admin</button></div>
+  <form data-form="login" autocomplete="on">
+  ${adm ? fld('Email', 'email', '', { type: 'email', req: 1, attr: 'autocomplete="username"' }) : fld('Username', 'username', '', { req: 1, attr: 'autocapitalize="none" autocomplete="username"' })}
+  ${fld('Password', 'password', '', { type: 'password', req: 1, attr: 'autocomplete="current-password"' })}
+  <div id="lerr" class="err" ${S.ui.cfgErr ? '' : 'hidden'}>${esc(S.ui.cfgErr)}</div>
+  <button class="btn pri block" type="submit">Masuk</button></form>
+  ${IS_PREVIEW ? `<div class="demo"><b>Akun demo (Mode Preview)</b><br>Admin: admin@demo.sch / admin123<br>Pengawas: budi / pengawas123</div>` : ''}
+  </div></div>`;
+}
+
+VIEWS.dash = () => {
+  const t = todayStr(), bm = bapMap(), js = S.data.jadwal.filter(j => j.tanggal === t);
+  const fin = js.filter(j => bm[j.id] && bm[j.id].status === 'final').length;
+  const dr = js.filter(j => bm[j.id] && bm[j.id].status === 'draf').length;
+  const bl = js.length - fin - dr, pct = js.length ? Math.round(fin / js.length * 100) : 0;
+  const late = S.data.jadwal.filter(j => j.tanggal < t && !(bm[j.id] && bm[j.id].status === 'final'));
+  return head('Dashboard', hariTgl(t)) +
+    `<div class="hero"><div><small>Progres BAP hari ini</small><h2>${fin} dari ${js.length} jadwal final</h2><p>${js.length ? 'Pantau BAP yang masuk dari pengawas.' : 'Belum ada ujian dijadwalkan hari ini.'}</p></div>${ring(pct)}</div>
+    <div class="stats"><div class="stat"><small>Final</small><b>${fin}</b><i style="background:var(--ok)"></i></div><div class="stat"><small>Draf</small><b>${dr}</b><i style="background:#F59E0B"></i></div><div class="stat"><small>Belum diisi</small><b>${bl}</b><i style="background:var(--coral)"></i></div></div>
+    <h3 class="sec">Jadwal hari ini</h3>${js.length ? js.map(j => jRow(j, bm)).join('') : empty('Tidak ada jadwal ujian hari ini.')}
+    ${late.length ? `<h3 class="sec">Jadwal lewat tanpa BAP final (${late.length})</h3>${late.slice(-8).reverse().map(j => jRow(j, bm)).join('')}` : ''}`;
+};
+
+/* ---- Master ---- */
+const M = {
+  mapel: {
+    lbl: 'Mata Pelajaran', title: r => r.nama, sub: r => r.kode || '',
+    form: r => fld('Nama mata pelajaran', 'nama', r.nama, { req: 1 }) + fld('Kode (opsional)', 'kode', r.kode),
+    read: f => ({ nama: f.nama.trim(), kode: (f.kode || '').trim() })
+  },
+  ruang: {
+    lbl: 'Ruang', title: r => r.nama, sub: r => (r.kelasBawaan && r.kelasBawaan.length) ? 'Kelas bawaan: ' + r.kelasBawaan.join(', ') : 'Tanpa kelas bawaan',
+    form: r => fld('Nama ruang', 'nama', r.nama, { req: 1, ph: 'mis. Ruang 01' }) +
+      `<div class="fld"><span>Kelas bawaan ruang (opsional, terisi otomatis saat pengawas memilih ruang)</span><div class="chk">${S.data.kelas.map(k => `<label class="chkit"><input type="checkbox" name="kb" value="${esc(k.nama)}" ${(r.kelasBawaan || []).includes(k.nama) ? 'checked' : ''}>${esc(k.nama)}</label>`).join('') || '<small>Tambahkan data kelas terlebih dulu.</small>'}</div></div>`,
+    read: (f, fd) => ({ nama: f.nama.trim(), kelasBawaan: fd.getAll('kb') })
+  },
+  kelas: {
+    lbl: 'Kelas', title: r => r.nama, sub: r => S.siswaLoaded ? S.data.siswa.filter(s => s.kelas === r.nama).length + ' siswa' : '',
+    form: r => fld('Nama kelas', 'nama', r.nama, { req: 1, ph: 'mis. X-1' }),
+    read: f => ({ nama: f.nama.trim() })
+  },
+  siswa: {
+    lbl: 'Peserta', title: r => r.nama, sub: r => `${r.nis} · Kelas ${r.kelas}`,
+    form: r => fld('NIS / No. Peserta', 'nis', r.nis, { req: 1 }) + fld('Nama lengkap', 'nama', r.nama, { req: 1 }) + sel('Kelas', 'kelas', S.data.kelas.map(k => [k.nama, k.nama]), r.kelas, { req: 1 }),
+    read: f => ({ nis: f.nis.trim(), nama: f.nama.trim(), kelas: f.kelas })
+  },
+  pengawas: {
+    lbl: 'Pengawas', title: r => r.nama, sub: r => `@${r.id}${r.nip ? ' · NIP ' + r.nip : ''}${r.aktif === false ? ' · nonaktif' : ''}`,
+    form: (r, edit) => fld('Username (huruf kecil, angka, titik, strip)', 'username', r.id || '', { req: 1, attr: edit ? 'readonly' : 'autocapitalize="none"' }) + fld('Nama lengkap (beserta gelar)', 'nama', r.nama, { req: 1 }) + fld('NIP (opsional)', 'nip', r.nip) +
+      fld(edit ? 'Password baru (kosongkan jika tidak diubah)' : 'Password (min. 6 karakter)', 'password', '', { type: 'password', req: !edit, attr: 'autocomplete="new-password"' }) +
+      `<label class="chkit" style="margin-bottom:12px;width:fit-content"><input type="checkbox" name="aktif" ${r.aktif === false ? '' : 'checked'}>Akun aktif</label>`,
+    read: async (f, fd, r, edit) => {
+      const username = (edit ? r.id : f.username).trim().toLowerCase();
+      if (!/^[a-z0-9._-]{3,30}$/.test(username)) throw new Error('Username 3–30 karakter: huruf kecil, angka, titik, garis bawah, atau strip.');
+      const data = { username, nama: f.nama.trim(), nip: (f.nip || '').trim(), aktif: !!fd.get('aktif'), salt: r.salt || '', hash: r.hash || '' };
+      if (f.password) {
+        if (f.password.length < 6) throw new Error('Password minimal 6 karakter.');
+        data.salt = newSalt(); data.hash = await hashPw(f.password, data.salt);
+      }
+      if (!data.hash) throw new Error('Password wajib diisi.');
+      return data;
+    }
+  }
+};
+
+VIEWS.master = () => {
+  const tabs = [['mapel', 'Mapel'], ['ruang', 'Ruang'], ['kelas', 'Kelas'], ['siswa', 'Peserta'], ['pengawas', 'Pengawas']];
+  const t = S.ui.mtab;
+  return head('Data Master', 'Kelola data pendukung ujian') +
+    `<div class="tabs scroll">${tabs.map(([k, n]) => `<button class="${t === k ? 'on' : ''}" data-act="mtab" data-v="${k}">${n}</button>`).join('')}</div>
+    <div class="toolbar"><div class="search">${ic('search', 18)}<input data-f="msearch" placeholder="Cari ${M[t].lbl.toLowerCase()}..." value="${esc(S.ui.msearch)}"></div>
+    ${t === 'siswa' ? `<select data-ch="mkelas" aria-label="Filter kelas"><option value="">Semua kelas</option>${S.data.kelas.map(k => `<option ${S.ui.mkelas === k.nama ? 'selected' : ''}>${esc(k.nama)}</option>`).join('')}</select><button class="btn ghost" data-act="mimport">${ic('upload', 18)}Impor</button>` : ''}
+    <button class="btn pri" data-act="madd">${ic('plus', 18)}Tambah</button></div>
+    <div id="mlist">${masterList()}</div>`;
+};
+function masterList() {
+  const t = S.ui.mtab, c = M[t], q = S.ui.msearch.toLowerCase();
+  let rows = S.data[t];
+  if (t === 'siswa' && S.ui.mkelas) rows = rows.filter(r => r.kelas === S.ui.mkelas);
+  if (q) rows = rows.filter(r => (c.title(r) + ' ' + c.sub(r)).toLowerCase().includes(q));
+  if (!rows.length) return empty(`Belum ada data ${c.lbl.toLowerCase()}.`);
+  const lim = 150, shown = rows.slice(0, lim);
+  return `<div class="mut cnt">${rows.length} data${rows.length > lim ? ` (menampilkan ${lim} pertama, gunakan pencarian)` : ''}</div>` +
+    shown.map(r => `<div class="card li"><div class="lm"><b>${esc(c.title(r))}</b><small>${esc(c.sub(r))}</small></div><div class="acts">${t !== 'kelas' ? `<button class="ib" data-act="medit" data-id="${esc(r.id)}" aria-label="Ubah">${ic('edit', 18)}</button>` : ''}<button class="ib bad" data-act="mdel" data-id="${esc(r.id)}" aria-label="Hapus">${ic('trash', 18)}</button></div></div>`).join('');
+}
+function openMaster(type, id) {
+  const edit = !!id, rec = edit ? (S.data[type].find(x => x.id === id) || {}) : {}, c = M[type];
+  if (type === 'siswa' && !S.data.kelas.length) { toast('Tambahkan data kelas terlebih dulu.', 'err'); return; }
+  openModal((edit ? 'Ubah ' : 'Tambah ') + c.lbl, `<form data-form="modal">${c.form(rec, edit)}${mfoot()}</form>`, {
+    submit: async fd => {
+      const f = Object.fromEntries(fd), data = await c.read(f, fd, rec, edit);
+      let nid = id;
+      if (type === 'kelas' && S.data.kelas.some(k => k.nama.toLowerCase() === data.nama.toLowerCase())) throw new Error('Nama kelas sudah ada.');
+      if (type === 'siswa') { await ensureSiswa(); if (S.data.siswa.some(s => s.nis === data.nis && s.id !== id)) throw new Error('NIS sudah terdaftar.'); }
+      if (type === 'pengawas') {
+        nid = edit ? id : data.username;
+        if (!edit && S.data.pengawas.some(p => p.id === nid)) throw new Error('Username sudah dipakai.');
+        await DB.set('pengawas', nid, data);
+      } else if (edit) await DB.update(type, id, data);
+      else nid = await DB.add(type, data);
+      upsertLocal(type, { ...(edit ? rec : {}), ...data, id: nid });
+      closeModal(); render(); toast('Data tersimpan.');
+    }
+  });
+}
+function deleteMaster(id) {
+  const type = S.ui.mtab, rec = S.data[type].find(x => x.id === id); if (!rec) return;
+  const J = S.data.jadwal;
+  const used = type === 'mapel' ? J.some(j => j.mapelId === id) : type === 'ruang' ? J.some(j => j.ruangId === id) : type === 'pengawas' ? J.some(j => j.pengawasId === id) : type === 'kelas' ? S.data.siswa.some(s => s.kelas === rec.nama) : false;
+  if (used) { toast('Tidak dapat dihapus: masih dipakai pada jadwal atau data siswa.', 'err'); return; }
+  confirmBox(`Hapus "${M[type].title(rec)}"?`, async () => { await DB.del(type, id); S.data[type] = S.data[type].filter(x => x.id !== id); render(); toast('Data dihapus.'); }, 'Hapus');
+}
+function openImport() {
+  openModal('Impor Data Peserta', `<form data-form="modal"><p class="mut" style="margin-bottom:10px;font-size:13px">Satu siswa per baris dengan format <b>NIS;Nama;Kelas</b> (pemisah titik koma, koma, atau tab). Kelas baru dibuat otomatis. NIS yang sudah ada akan diperbarui.</p>
+  <label class="fld"><span>Pilih file CSV / TXT (opsional)</span><input type="file" accept=".csv,.txt,text/csv,text/plain" data-ch="impfile"></label>
+  <label class="fld"><span>Atau tempel data di sini</span><textarea name="teks" id="imptxt" rows="9" placeholder="1001;Ahmad Fauzi;X-1&#10;1002;Siti Rahma;X-2"></textarea></label>${mfoot('Impor')}</form>`, {
+    submit: async fd => {
+      const r = await withLoad(() => importSiswa(String(fd.get('teks') || '')));
+      closeModal(); render(); toast(`${r.baru} siswa baru, ${r.ubah} diperbarui${r.bad ? `, ${r.bad} baris dilewati` : ''}.`);
+    }
+  });
+}
+async function importSiswa(text) {
+  const rows = [], bad = [];
+  text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).forEach((l, i) => {
+    const p = l.split(/[;\t,]/).map(x => x.trim());
+    if (i === 0 && /^(nis|nomor|no\.?\s*peserta)/i.test(p[0])) return;
+    if (p.length < 3 || !p[0] || !p[1] || !p[2]) { bad.push(i + 1); return; }
+    rows.push({ nis: p[0], nama: p[1], kelas: p[2] });
+  });
+  if (!rows.length) throw new Error('Tidak ada baris valid. Format: NIS;Nama;Kelas');
+  await ensureSiswa();
+  const byNis = new Map(S.data.siswa.map(s => [s.nis, s.id]));
+  const kn = new Set(S.data.kelas.map(k => k.nama));
+  const newK = [...new Set(rows.map(r => r.kelas))].filter(k => !kn.has(k));
+  if (newK.length) {
+    const ids = await DB.setMany('kelas', newK.map(n => ({ data: { nama: n } })));
+    newK.forEach((n, i) => S.data.kelas.push({ id: ids[i], nama: n }));
+  }
+  const m = new Map(); rows.forEach(r => m.set(r.nis, r));
+  const items = [...m.values()].map(r => ({ id: byNis.get(r.nis) || null, data: r }));
+  const ids = await DB.setMany('siswa', items);
+  items.forEach((it, i) => upsertLocal('siswa', { ...it.data, id: ids[i] }));
+  return { baru: items.filter(i => !i.id).length, ubah: items.filter(i => i.id).length, bad: bad.length };
+}
+
+/* ---- Jadwal ---- */
+VIEWS.jadwal = () => {
+  const modes = [['today', 'Hari ini'], ['upcoming', 'Mendatang'], ['all', 'Semua']];
+  return head('Jadwal Ujian', 'Tugaskan pengawas ke ruang dan mata pelajaran') +
+    `<div class="toolbar"><div class="tabs" style="margin:0;flex:1">${modes.map(([k, n]) => `<button class="${S.ui.jmode === k ? 'on' : ''}" data-act="jmode" data-v="${k}">${n}</button>`).join('')}</div><button class="btn pri" data-act="jadd">${ic('plus', 18)}Tambah Jadwal</button></div>${jadwalList()}`;
+};
+function jadwalList() {
+  const t = todayStr(), m = S.ui.jmode, bm = bapMap();
+  const js = S.data.jadwal.filter(j => m === 'all' || (m === 'today' ? j.tanggal === t : j.tanggal >= t));
+  if (!js.length) return empty('Belum ada jadwal pada tampilan ini.');
+  let h = '', cur = '';
+  for (const j of js) {
+    if (j.tanggal !== cur) { cur = j.tanggal; h += `<h3 class="sec">${esc(hariTgl(cur))}</h3>`; }
+    h += jRow(j, bm, `<div class="acts"><button class="ib" data-act="jedit" data-id="${esc(j.id)}" aria-label="Ubah">${ic('edit', 18)}</button><button class="ib bad" data-act="jdel" data-id="${esc(j.id)}" aria-label="Hapus">${ic('trash', 18)}</button></div>`);
+  }
+  return h;
+}
+function openJadwal(id) {
+  const edit = !!id, r = edit ? S.data.jadwal.find(j => j.id === id) : { tanggal: todayStr() };
+  if (!S.data.mapel.length || !S.data.ruang.length || !S.data.pengawas.length) { toast('Lengkapi dulu data Mapel, Ruang, dan Pengawas di Data Master.', 'err'); return; }
+  openModal(edit ? 'Ubah Jadwal' : 'Tambah Jadwal', `<form data-form="modal"><div class="g2">
+    ${fld('Tanggal', 'tanggal', r.tanggal, { type: 'date', req: 1, cls: 'full' })}
+    ${fld('Jam mulai', 'jamMulai', r.jamMulai, { type: 'time', req: 1 })}${fld('Jam selesai', 'jamSelesai', r.jamSelesai, { type: 'time', req: 1 })}
+    ${sel('Mata pelajaran', 'mapelId', S.data.mapel.map(x => [x.id, x.nama]), r.mapelId, { req: 1 })}
+    ${sel('Ruang', 'ruangId', S.data.ruang.map(x => [x.id, x.nama]), r.ruangId, { req: 1 })}
+    ${sel('Pengawas', 'pengawasId', S.data.pengawas.filter(p => p.aktif !== false || p.id === r.pengawasId).map(x => [x.id, x.nama]), r.pengawasId, { req: 1 })}
+    ${fld('Pengawas pendamping (opsional)', 'pengawas2', r.pengawas2)}</div>${mfoot()}</form>`, {
+    submit: async fd => {
+      const f = Object.fromEntries(fd);
+      if (f.jamSelesai <= f.jamMulai) throw new Error('Jam selesai harus setelah jam mulai.');
+      const mp = S.data.mapel.find(x => x.id === f.mapelId), rg = S.data.ruang.find(x => x.id === f.ruangId), pg = S.data.pengawas.find(x => x.id === f.pengawasId);
+      const data = { tanggal: f.tanggal, jamMulai: f.jamMulai, jamSelesai: f.jamSelesai, mapelId: mp.id, mapelNama: mp.nama, ruangId: rg.id, ruangNama: rg.nama, pengawasId: pg.id, pengawasNama: pg.nama, pengawas2: (f.pengawas2 || '').trim() };
+      let nid = id;
+      if (edit) await DB.update('jadwal', id, data); else nid = await DB.add('jadwal', data);
+      upsertLocal('jadwal', { ...(edit ? r : {}), ...data, id: nid });
+      closeModal(); render(); toast('Jadwal tersimpan.');
+    }
+  });
+}
+function deleteJadwal(id) {
+  if (S.data.bap.some(b => b.id === id)) { toast('Jadwal ini sudah memiliki BAP. Hapus BAP-nya di menu Rekap terlebih dulu.', 'err'); return; }
+  confirmBox('Hapus jadwal ini?', async () => { await DB.del('jadwal', id); S.data.jadwal = S.data.jadwal.filter(j => j.id !== id); render(); toast('Jadwal dihapus.'); }, 'Hapus');
+}
+
+/* ---- Rekap ---- */
+VIEWS.rekap = () => {
+  const f = S.ui.rf;
+  return head('Rekap BAP', 'Semua berita acara dari pengawas') +
+    `<div class="card"><div class="g2">
+    ${fld('Dari tanggal', 'dari', f.dari, { type: 'date', attr: 'data-ch="rf" data-k="dari"' })}${fld('Sampai tanggal', 'sampai', f.sampai, { type: 'date', attr: 'data-ch="rf" data-k="sampai"' })}
+    ${sel('Ruang', 'ruang', S.data.ruang.map(r => [r.id, r.nama]), f.ruang, { blank: 'Semua ruang', attr: 'data-ch="rf" data-k="ruang"' })}
+    ${sel('Mata pelajaran', 'mapel', S.data.mapel.map(r => [r.nama, r.nama]), f.mapel, { blank: 'Semua mapel', attr: 'data-ch="rf" data-k="mapel"' })}
+    ${sel('Status', 'status', [['draf', 'Draf'], ['final', 'Final']], f.status, { blank: 'Semua status', attr: 'data-ch="rf" data-k="status"' })}
+    ${fld('Cari pengawas / mapel', 'q', f.q, { attr: 'data-f="rq"' })}</div></div><div id="rlist">${rekapList()}</div>`;
+};
+function rekapRows() {
+  const f = S.ui.rf, q = f.q.toLowerCase();
+  return S.data.bap.filter(b => (!f.dari || b.tanggal >= f.dari) && (!f.sampai || b.tanggal <= f.sampai) && (!f.ruang || b.ruangId === f.ruang) && (!f.mapel || b.mapelNama === f.mapel) && (!f.status || b.status === f.status) && (!q || (b.pengawasNama + ' ' + b.mapelNama).toLowerCase().includes(q)));
+}
+function rekapList() {
+  const rows = rekapRows();
+  if (!rows.length) return empty('Belum ada BAP yang sesuai filter.');
+  return `<div class="mut cnt">${rows.length} BAP</div>` + rows.map(b => `<div class="card li col"><div class="lm"><b>${esc(b.mapelNama)}</b><small>${esc(fmtTgl(b.tanggal))} · ${esc(b.ruangNama)} · Kelas ${esc((b.kelas || []).join(', '))}</small><small>Pengawas: ${esc(b.pengawasNama)} · Hadir ${b.hadir}/${b.jumlahSeharusnya}</small></div><div class="rt">${stChip(b)}<div class="acts">
+    <button class="ib" data-act="rview" data-id="${esc(b.id)}" aria-label="Lihat">${ic('eye', 18)}</button><button class="ib" data-act="rpdf" data-id="${esc(b.id)}" aria-label="Cetak PDF">${ic('download', 18)}</button>
+    ${b.status === 'final' ? `<button class="ib" data-act="runlock" data-id="${esc(b.id)}" aria-label="Buka kunci">${ic('unlock', 18)}</button>` : ''}<button class="ib bad" data-act="rdel" data-id="${esc(b.id)}" aria-label="Hapus">${ic('trash', 18)}</button></div></div></div>`).join('');
+}
+function viewBapModal(b) {
+  const tdh = (b.kehadiran || []).filter(r => r.status !== 'H');
+  openModal('Detail BAP', `<div class="kv"><span>Mata pelajaran</span><span>${esc(b.mapelNama)}</span><span>Tanggal</span><span>${esc(hariTgl(b.tanggal))}</span><span>Waktu</span><span>${esc(b.mulai)} – ${esc(b.selesai)} WIB</span><span>Ruang</span><span>${esc(b.ruangNama)}</span><span>Kelas</span><span>${esc((b.kelas || []).join(', '))}</span><span>Pengawas</span><span>${esc(b.pengawasNama)}${b.pengawas2 ? ' &amp; ' + esc(b.pengawas2) : ''}</span><span>Lembar jawaban</span><span>${b.jumlahLJK == null ? '-' : esc(b.jumlahLJK)}</span><span>Status</span><span>${stChip(b)}</span></div>
+  <table class="dtab"><tr><th>Kelas</th><th>Seharusnya</th><th>Hadir</th><th>Tidak hadir</th></tr>${(b.rekapKelas || []).map(r => `<tr><td>${esc(r.kelas)}</td><td>${r.seharusnya}</td><td>${r.hadir}</td><td>${r.tidakHadir}</td></tr>`).join('')}<tr><th>Total</th><th>${b.jumlahSeharusnya}</th><th>${b.hadir}</th><th>${b.tidakHadir}</th></tr></table>
+  <h3 class="sec">Peserta tidak hadir</h3>${tdh.length ? `<table class="dtab">${tdh.map(r => `<tr><td>${esc(r.nama)}<br><small>${esc(r.nis)} · ${esc(r.kelas)}</small></td><td>${esc(LBL[r.status])}${r.ket ? ' – ' + esc(r.ket) : ''}</td></tr>`).join('')}</table>` : '<p class="mut">Nihil.</p>'}
+  <h3 class="sec">Catatan</h3><p style="white-space:pre-wrap">${esc(b.catatan || 'Tidak ada catatan.')}</p>
+  <div class="mf"><button class="btn" data-act="mclose">Tutup</button><button class="btn pri" data-act="rpdf" data-id="${esc(b.id)}">${ic('download', 18)}Cetak PDF</button></div>`);
+}
+
+/* ---- Pengaturan ---- */
+VIEWS.set = () => {
+  const s = S.data.settings || {}, logo = S.ui.logoTmp !== null ? S.ui.logoTmp : (s.logo || '');
+  return head('Pengaturan', 'Identitas sekolah untuk kop dan tanda tangan PDF') +
+    `<form data-form="settings" class="card"><div class="g2">
+    ${fld('Nama sekolah', 'nama', s.nama, { req: 1, cls: 'full' })}${fld('Alamat sekolah (untuk kop)', 'alamat', s.alamat, { type: 'textarea', rows: 2, cls: 'full' })}
+    ${fld('Kota (untuk tanda tangan)', 'kota', s.kota)}${fld('Tahun pelajaran', 'tahunAjaran', s.tahunAjaran, { ph: '2026/2027' })}
+    ${fld('Jenis ujian', 'jenisUjian', s.jenisUjian, { req: 1, ph: 'mis. Asesmen Sumatif Akhir Semester' })}
+    ${sel('Ukuran kertas PDF', 'kertas', [['A4', 'A4 (210 × 297 mm)'], ['F4', 'F4 (215 × 330 mm)']], s.kertas || 'A4', { noblank: true })}
+    ${fld('Nama kepala sekolah', 'kepsek', s.kepsek)}${fld('NIP kepala sekolah', 'nipKepsek', s.nipKepsek)}</div>
+    <div class="fld"><span>Logo sekolah (opsional)</span><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><div class="logoprev" id="logoPrev">${logo ? `<img src="${esc(logo)}" alt="Logo">` : 'Belum ada'}</div><input type="file" accept="image/*" data-ch="logo" style="max-width:220px"><button type="button" class="btn" data-act="logodel">Hapus logo</button></div></div>
+    <button class="btn pri" type="submit">Simpan Pengaturan</button></form>`;
+};
+
+/* ---- Pengawas: beranda, riwayat, akun ---- */
+function jTile(j, i, bm) {
+  const b = bm[j.id], fin = b && b.status === 'final';
+  return `<div class="tile t${i % 4}"><small>${esc(fmtTgl(j.tanggal))}</small><h4>${esc(j.mapelNama)}</h4><small>${esc(j.ruangNama)} · ${esc(j.jamMulai)}–${esc(j.jamSelesai)} WIB</small><div class="tf">${stChip(b)}<button class="btn" data-act="bopen" data-id="${esc(j.id)}">${fin ? 'Lihat BAP' : b ? 'Lanjutkan' : 'Isi BAP'}</button></div></div>`;
+}
+VIEWS.home = () => {
+  const t = todayStr(), bm = bapMap(), J = S.data.jadwal, fn = String(S.user.nama).split(/[ ,]/)[0];
+  const today = J.filter(j => j.tanggal === t), up = J.filter(j => j.tanggal > t).slice(0, 8);
+  const late = J.filter(j => j.tanggal < t && !(bm[j.id] && bm[j.id].status === 'final')).reverse().slice(0, 8);
+  const fin = today.filter(j => bm[j.id] && bm[j.id].status === 'final').length, pct = today.length ? Math.round(fin / today.length * 100) : 0;
+  const grid = (arr, off = 0) => `<div class="tgrid">${arr.map((j, i) => jTile(j, i + off, bm)).join('')}</div>`;
+  return head(`Halo, ${fn}`, hariTgl(t)) +
+    `<div class="hero"><div><small>Pengawasan hari ini</small><h2>${today.length} jadwal</h2><p>${today.length ? `${fin} BAP sudah final.` : 'Tidak ada jadwal hari ini.'}</p></div>${ring(pct)}</div>` +
+    (today.length ? `<h3 class="sec">Hari ini</h3>${grid(today)}` : '') +
+    (late.length ? `<h3 class="sec">Belum dilengkapi</h3>${grid(late, 1)}` : '') +
+    (up.length ? `<h3 class="sec">Mendatang</h3>${grid(up, 2)}` : '') +
+    (!J.length ? empty('Belum ada jadwal pengawasan untuk Anda. Hubungi admin.') : '');
+};
+VIEWS.riwayat = () => head('Riwayat BAP', 'BAP yang pernah Anda isi') + (S.data.bap.length ? S.data.bap.map(b => `<div class="card li col"><div class="lm"><b>${esc(b.mapelNama)}</b><small>${esc(fmtTgl(b.tanggal))} · ${esc(b.ruangNama)} · Kelas ${esc((b.kelas || []).join(', '))}</small><small>Hadir ${b.hadir}/${b.jumlahSeharusnya}</small></div><div class="rt">${stChip(b)}<div class="acts"><button class="ib" data-act="bopen" data-id="${esc(b.id)}" aria-label="Buka">${ic(b.status === 'final' ? 'eye' : 'edit', 18)}</button><button class="ib" data-act="rpdf" data-id="${esc(b.id)}" aria-label="Cetak PDF">${ic('download', 18)}</button></div></div></div>`).join('') : empty('Belum ada BAP yang diisi.'));
+VIEWS.akun = () => `${head('Akun')}<div class="card"><div class="uchip" style="padding:0 0 14px"><div class="av">${esc(initial(S.user.nama))}</div><div><b>${esc(S.user.nama)}</b><small>Pengawas${S.user.nip ? ' · NIP ' + esc(S.user.nip) : ''}</small></div></div><div class="kv"><span>Username</span><span>${esc(S.user.id)}</span><span>Sekolah</span><span>${esc(S.data.settings.nama || '-')}</span></div><p class="mut" style="font-size:12px;margin-bottom:14px">Lupa password? Hubungi admin untuk mengatur ulang.</p><button class="btn block" data-act="logout">${ic('logout', 18)}Keluar</button></div>`;
+
+/* ---- Isi BAP ---- */
+VIEWS.bap = () => S.form ? viewBapForm() : viewChooser();
+function viewChooser() {
+  const t = todayStr(), bm = bapMap();
+  const js = S.data.jadwal.filter(j => !(bm[j.id] && bm[j.id].status === 'final') && j.tanggal <= t).concat(S.data.jadwal.filter(j => j.tanggal > t)).slice(0, 12);
+  return head('Isi BAP', 'Pilih jadwal pengawasan yang akan dibuatkan berita acara') +
+    (js.length ? `<div class="tgrid">${js.map((j, i) => jTile(j, i, bm)).join('')}</div>` : empty('Tidak ada jadwal yang menunggu BAP. Jadwal yang sudah final ada di Riwayat.'));
+}
+async function openBapForm(jadwalId) {
+  const j = S.data.jadwal.find(x => x.id === jadwalId), ex = S.data.bap.find(b => b.id === jadwalId);
+  if (!j) { toast('Jadwal tidak ditemukan.', 'err'); return; }
+  if (ex) {
+    const F = { ...clone(ex), jadwalId, kehadiranMap: {}, siswaKelas: {}, dirty: false };
+    F.jumlahLJK = ex.jumlahLJK == null ? '' : ex.jumlahLJK;
+    (ex.kehadiran || []).forEach(r => {
+      F.kehadiranMap[r.siswaId] = { status: r.status, ket: r.ket || '' };
+      (F.siswaKelas[r.kelas] = F.siswaKelas[r.kelas] || []).push({ siswaId: r.siswaId, nis: r.nis, nama: r.nama, kelas: r.kelas });
+    });
+    S.form = F;
+  } else {
+    S.form = { jadwalId, tanggal: j.tanggal, mapelNama: j.mapelNama, ruangId: j.ruangId || '', mulai: j.jamMulai || '', selesai: j.jamSelesai || '', kelas: [], siswaKelas: {}, kehadiranMap: {}, jumlahLJK: '', catatan: '', pengawas2: j.pengawas2 || '', pengawasId: j.pengawasId, pengawasNama: j.pengawasNama, status: 'draf', dirty: false };
+    const r = S.data.ruang.find(x => x.id === j.ruangId);
+    if (r && r.kelasBawaan && r.kelasBawaan.length) await withLoad(() => setKelas(r.kelasBawaan.filter(n => S.data.kelas.some(k => k.nama === n))));
+  }
+  S.page = 'bap'; render(); const m = $('#main'); if (m) m.scrollTop = 0;
+}
+async function setKelas(names) {
+  const F = S.form;
+  for (const k of names) {
+    if (!F.siswaKelas[k]) {
+      const rows = await DB.list('siswa', [['kelas', '==', k]]);
+      F.siswaKelas[k] = rows.map(r => ({ siswaId: r.id, nis: r.nis, nama: r.nama, kelas: k })).sort((a, b) => byName(a.nama, b.nama));
+      rows.forEach(r => { if (!F.kehadiranMap[r.id]) F.kehadiranMap[r.id] = { status: 'H', ket: '' }; });
+    }
+  }
+  F.kelas = [...names];
+}
+function kelasBox() {
+  const F = S.form, ro = F.status === 'final', avail = S.data.kelas.filter(k => !F.kelas.includes(k.nama));
+  return `<div class="chips">${F.kelas.map(k => `<span class="chip pri">${esc(k)}${ro ? '' : `<button type="button" data-act="kdel" data-v="${esc(k)}" aria-label="Hapus kelas ${esc(k)}">${ic('x', 14)}</button>`}</span>`).join('') || '<small>Belum ada kelas dipilih</small>'}</div>
+  ${ro ? '' : `<select class="sel" data-ch="kadd" aria-label="Tambah kelas"><option value="">+ Tambah kelas…</option>${avail.map(k => `<option value="${esc(k.nama)}">${esc(k.nama)}</option>`).join('')}</select>`}`;
+}
+function srow(r, i, ro) {
+  const m = S.form.kehadiranMap[r.siswaId] || { status: 'H', ket: '' };
+  return `<div class="srow"><span class="sno">${i + 1}</span><div class="sinfo"><b>${esc(r.nama)}</b><small>${esc(r.nis)}</small></div><div class="seg">${['H', 'S', 'I', 'A'].map(s => `<button type="button" class="${m.status === s ? 'on ' + s : ''}" data-act="st" data-sid="${esc(r.siswaId)}" data-v="${s}" title="${LBL[s]}" aria-label="${LBL[s]}" ${ro ? 'disabled' : ''}>${s}</button>`).join('')}</div>${m.status !== 'H' ? `<input class="sket" data-f="ket" data-sid="${esc(r.siswaId)}" value="${esc(m.ket)}" placeholder="Keterangan (opsional)" ${ro ? 'disabled' : ''}>` : ''}</div>`;
+}
+function siswaBox() {
+  const F = S.form, ro = F.status === 'final';
+  if (!F.kelas.length) return '<div class="empty">Pilih kelas untuk menampilkan daftar siswa.</div>';
+  let tot = 0, hd = 0;
+  const groups = F.kelas.map(k => {
+    const rows = F.siswaKelas[k] || []; let h = 0;
+    rows.forEach(r => { if (((F.kehadiranMap[r.siswaId] || {}).status || 'H') === 'H') h++; });
+    tot += rows.length; hd += h;
+    return `<div class="card grp"><div class="gh"><b>Kelas ${esc(k)}</b><span class="chip">${h}/${rows.length} hadir</span></div>${rows.length ? rows.map((r, i) => srow(r, i, ro)).join('') : '<div class="mut pad" style="padding:12px 16px">Belum ada siswa di kelas ini. Admin dapat menambahkannya di Data Master.</div>'}</div>`;
+  }).join('');
+  return `<div class="stats" style="margin-bottom:12px"><div class="stat"><small>Seharusnya</small><b>${tot}</b><i></i></div><div class="stat"><small>Hadir</small><b>${hd}</b><i style="background:var(--ok)"></i></div><div class="stat"><small>Tidak hadir</small><b>${tot - hd}</b><i style="background:var(--coral)"></i></div></div>${groups}`;
+}
+function viewBapForm() {
+  const F = S.form, ro = F.status === 'final', dis = ro ? 'disabled' : '';
+  return head('Isi BAP', `${F.mapelNama} · ${fmtTgl(F.tanggal)}`, `<button class="btn" data-act="bback">${ic('back', 18)}Kembali</button>`) +
+    (ro ? '<div class="note ok">BAP ini sudah final dan terkunci. Hubungi admin jika perlu diubah.</div>' : '<div class="note info">Semua siswa otomatis berstatus Hadir. Ubah status siswa yang tidak hadir: S = Sakit, I = Izin, A = Alpa.</div>') +
+    `<div class="card"><div class="g2">
+    ${sel('Ruang ujian', 'ruangId', S.data.ruang.map(r => [r.id, r.nama]), F.ruangId, { attr: `data-ch="fruang" ${dis}` })}
+    <div class="fld"><span>Kelas (boleh lebih dari satu)</span><div id="kelasBox">${kelasBox()}</div></div>
+    ${fld('Jam mulai', 'mulai', F.mulai, { type: 'time', attr: `data-f="mulai" ${dis}` })}${fld('Jam selesai', 'selesai', F.selesai, { type: 'time', attr: `data-f="selesai" ${dis}` })}
+    ${fld('Jumlah lembar jawaban', 'jumlahLJK', F.jumlahLJK, { type: 'number', attr: `data-f="jumlahLJK" min="0" inputmode="numeric" ${dis}` })}${fld('Pengawas pendamping', 'pengawas2', F.pengawas2, { attr: `data-f="pengawas2" ${dis}` })}</div></div>
+    <div id="siswaBox">${siswaBox()}</div>
+    <div class="card">${fld('Catatan selama pelaksanaan ujian', 'catatan', F.catatan, { type: 'textarea', rows: 4, attr: `data-f="catatan" ${dis}`, ph: 'Kosongkan jika tidak ada kejadian khusus' })}</div>
+    <div class="bar">${ro ? '' : '<button class="btn" data-act="bsave">Simpan Draf</button><button class="btn pri" data-act="bfinal">Finalkan BAP</button>'}<button class="btn ghost" data-act="bpdf">${ic('download', 18)}Cetak PDF</button></div>`;
+}
+const refreshSiswa = () => { const el = $('#siswaBox'); if (el) el.innerHTML = siswaBox(); };
+const refreshKelas = () => { const k = $('#kelasBox'); if (k) k.innerHTML = kelasBox(); refreshSiswa(); };
+function collectBap() {
+  const F = S.form, kehadiran = [], rekap = [];
+  let tot = 0, hd = 0;
+  for (const k of F.kelas) {
+    const rows = F.siswaKelas[k] || []; let h = 0, t = 0;
+    for (const r of rows) {
+      const m = F.kehadiranMap[r.siswaId] || { status: 'H', ket: '' };
+      kehadiran.push({ siswaId: r.siswaId, nis: r.nis, nama: r.nama, kelas: k, status: m.status, ket: m.status === 'H' ? '' : (m.ket || '').trim() });
+      if (m.status === 'H') h++; else t++;
+    }
+    rekap.push({ kelas: k, seharusnya: rows.length, hadir: h, tidakHadir: t }); tot += rows.length; hd += h;
+  }
+  const rg = S.data.ruang.find(r => r.id === F.ruangId);
+  return {
+    jadwalId: F.jadwalId, tanggal: F.tanggal, mapelNama: F.mapelNama, ruangId: F.ruangId, ruangNama: rg ? rg.nama : '',
+    kelas: [...F.kelas], rekapKelas: rekap, jumlahSeharusnya: tot, hadir: hd, tidakHadir: tot - hd, kehadiran,
+    mulai: F.mulai, selesai: F.selesai, jumlahLJK: F.jumlahLJK === '' || F.jumlahLJK == null ? null : Number(F.jumlahLJK),
+    catatan: (F.catatan || '').trim(), pengawasId: F.pengawasId, pengawasNama: F.pengawasNama, pengawasNip: S.user.nip || F.pengawasNip || '',
+    pengawas2: (F.pengawas2 || '').trim(), status: F.status
+  };
+}
+function validateBap(fin) {
+  const F = S.form;
+  if (!F.ruangId) return 'Pilih ruang ujian.';
+  if (!F.kelas.length) return 'Pilih minimal satu kelas.';
+  if (!fin) return '';
+  if (!F.mulai || !F.selesai) return 'Isi jam mulai dan jam selesai.';
+  if (F.selesai <= F.mulai) return 'Jam selesai harus setelah jam mulai.';
+  if (F.jumlahLJK !== '' && Number(F.jumlahLJK) < 0) return 'Jumlah lembar jawaban tidak valid.';
+  if (F.kelas.every(k => !(F.siswaKelas[k] || []).length)) return 'Kelas terpilih belum memiliki siswa.';
+  return '';
+}
+async function saveBap(fin) {
+  const F = S.form, err = validateBap(fin);
+  if (err) { toast(err, 'err'); return; }
+  const doSave = async () => {
+    const prev = F.status; F.status = fin ? 'final' : 'draf';
+    try {
+      const b = collectBap(), now = new Date().toISOString();
+      b.dibuatPada = F.dibuatPada || now; b.diubahPada = now;
+      await withLoad(() => DB.set('bap', F.jadwalId, b));
+      F.dibuatPada = b.dibuatPada; F.dirty = false;
+      upsertLocal('bap', { ...b, id: F.jadwalId });
+      toast(fin ? 'BAP difinalkan dan terkunci.' : 'Draf tersimpan.'); render();
+    } catch (e) { F.status = prev; throw e; }
+  };
+  if (fin) confirmBox('Finalkan BAP ini? Setelah final, BAP terkunci dan hanya admin yang dapat membukanya kembali.', doSave, 'Finalkan'); else await doSave();
+}
+function guard(fn) {
+  if (S.form && S.form.dirty && S.form.status !== 'final') confirmBox('Perubahan BAP belum disimpan dan akan hilang. Tetap keluar?', () => { S.form.dirty = false; fn(); }, 'Tetap keluar'); else fn();
+}
+
+/* ================= PDF ================= */
+const loaded = {};
+function loadScript(src) {
+  return loaded[src] || (loaded[src] = new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = src; s.onload = res;
+    s.onerror = () => { delete loaded[src]; rej(new Error('Gagal memuat pustaka PDF. Periksa koneksi internet.')); };
+    document.head.appendChild(s);
+  }));
+}
+async function makePdf(b) {
+  await loadScript(JSPDF); await loadScript(ATBL);
+  const { jsPDF } = window.jspdf, st = S.data.settings || {};
+  const doc = new jsPDF({ unit: 'mm', format: st.kertas === 'F4' ? [215, 330] : 'a4', orientation: 'portrait' });
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), mL = 20, mR = 20, cw = W - mL - mR;
+  let y = 16;
+  const need = h => { if (y + h > H - 16) { doc.addPage(); y = 20; } };
+  const tableBase = { theme: 'grid', margin: { left: mL, right: mR }, styles: { font: 'times', fontSize: 10.5, lineColor: [0, 0, 0], lineWidth: 0.2, textColor: 0, cellPadding: 1.8 }, headStyles: { fillColor: [255, 255, 255], textColor: 0, fontStyle: 'bold', halign: 'center' } };
+
+  if (st.logo) { try { doc.addImage(st.logo, 'PNG', mL, y - 1, 22, 22); } catch (e) { /* logo diabaikan */ } }
+  doc.setFont('times', 'bold'); doc.setFontSize(14);
+  doc.text(String(st.nama || 'NAMA SEKOLAH').toUpperCase(), W / 2, y + 6, { align: 'center' });
+  doc.setFont('times', 'normal'); doc.setFontSize(10);
+  const al = doc.splitTextToSize(st.alamat || '', cw - 50);
+  doc.text(al, W / 2, y + 12, { align: 'center' });
+  y = Math.max(y + 13 + al.length * 4.5, y + 24);
+  doc.setLineWidth(0.8); doc.line(mL, y, W - mR, y); doc.setLineWidth(0.2); doc.line(mL, y + 1.2, W - mR, y + 1.2);
+  y += 9;
+
+  doc.setFont('times', 'bold'); doc.setFontSize(12);
+  doc.text('BERITA ACARA PELAKSANAAN ' + String(st.jenisUjian || 'UJIAN').toUpperCase(), W / 2, y, { align: 'center' }); y += 5.5;
+  if (st.tahunAjaran) { doc.text('TAHUN PELAJARAN ' + st.tahunAjaran, W / 2, y, { align: 'center' }); y += 5.5; }
+  y += 4;
+
+  const d = parseD(b.tanggal);
+  const narasi = `Pada hari ini ${HARI[d.getDay()]}, tanggal ${d.getDate()} bulan ${BULAN[d.getMonth()]} tahun ${d.getFullYear()}, telah diselenggarakan ${st.jenisUjian || 'ujian'} mata pelajaran ${b.mapelNama} di ${st.nama || 'sekolah'} dari pukul ${b.mulai} sampai dengan pukul ${b.selesai} WIB, dengan rincian sebagai berikut:`;
+  doc.setFont('times', 'normal'); doc.setFontSize(11);
+  const nl = doc.splitTextToSize(narasi, cw);
+  doc.text(narasi, mL, y, { maxWidth: cw, align: 'justify' }); y += nl.length * 5 + 3;
+
+  doc.autoTable({
+    startY: y, theme: 'plain', margin: { left: mL, right: mR }, styles: { font: 'times', fontSize: 11, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 1 }, textColor: 0 },
+    columnStyles: { 0: { cellWidth: 62 }, 1: { cellWidth: cw - 62 } },
+    body: [['Ruang ujian', ': ' + b.ruangNama], ['Kelas', ': ' + (b.kelas || []).join(', ')], ['Jumlah peserta seharusnya', `: ${b.jumlahSeharusnya} orang`], ['Jumlah peserta hadir', `: ${b.hadir} orang`], ['Jumlah peserta tidak hadir', `: ${b.tidakHadir} orang`], ['Jumlah lembar jawaban', `: ${b.jumlahLJK == null ? '-' : b.jumlahLJK + ' lembar'}`]]
+  });
+  y = doc.lastAutoTable.finalY + 5;
+
+  if ((b.rekapKelas || []).length > 1) {
+    need(30);
+    doc.autoTable({ ...tableBase, startY: y, head: [['Kelas', 'Seharusnya', 'Hadir', 'Tidak Hadir']], body: [...b.rekapKelas.map(r => [r.kelas, String(r.seharusnya), String(r.hadir), String(r.tidakHadir)]), ['Total', String(b.jumlahSeharusnya), String(b.hadir), String(b.tidakHadir)]], columnStyles: { 0: { halign: 'left' }, 1: { halign: 'center' }, 2: { halign: 'center' }, 3: { halign: 'center' } } });
+    y = doc.lastAutoTable.finalY + 6;
+  }
+
+  need(24);
+  doc.setFont('times', 'bold'); doc.setFontSize(11); doc.text('Peserta yang tidak hadir:', mL, y); y += 3;
+  const tdh = (b.kehadiran || []).filter(r => r.status !== 'H');
+  if (tdh.length) {
+    doc.autoTable({ ...tableBase, startY: y, head: [['No', 'NIS', 'Nama', 'Kelas', 'Keterangan']], body: tdh.map((r, i) => [String(i + 1), String(r.nis), r.nama, r.kelas, LBL[r.status] + (r.ket ? ' – ' + r.ket : '')]), columnStyles: { 0: { cellWidth: 10, halign: 'center' }, 1: { cellWidth: 26 }, 3: { cellWidth: 20, halign: 'center' } } });
+    y = doc.lastAutoTable.finalY + 6;
+  } else { doc.setFont('times', 'italic'); doc.text('Nihil (seluruh peserta hadir).', mL, y + 5); y += 11; }
+
+  need(30);
+  doc.setFont('times', 'bold'); doc.text('Catatan selama pelaksanaan ujian:', mL, y); y += 5.5;
+  doc.setFont('times', 'normal');
+  const cl = doc.splitTextToSize(b.catatan || 'Tidak ada catatan khusus. Ujian berjalan dengan lancar.', cw);
+  cl.forEach(line => { need(6); doc.text(line, mL, y); y += 5; });
+  y += 4;
+
+  need(14);
+  const pen = doc.splitTextToSize('Demikian berita acara ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.', cw);
+  doc.text(pen, mL, y); y += pen.length * 5 + 6;
+
+  need(95);
+  const cxL = mL + cw * 0.25, cxR = mL + cw * 0.75, ul = (txt, x, yy) => { const w = doc.getTextWidth(txt); doc.line(x - w / 2, yy + 0.8, x + w / 2, yy + 0.8); };
+  doc.text(`${st.kota ? st.kota + ', ' : ''}${d.getDate()} ${BULAN[d.getMonth()]} ${d.getFullYear()}`, cxR, y, { align: 'center' }); y += 6;
+  doc.text('Pengawas 1', cxL, y, { align: 'center' }); doc.text('Pengawas 2', cxR, y, { align: 'center' }); y += 22;
+  doc.setFont('times', 'bold');
+  doc.text(b.pengawasNama || '', cxL, y, { align: 'center' }); ul(b.pengawasNama || '', cxL, y);
+  if (b.pengawas2) { doc.text(b.pengawas2, cxR, y, { align: 'center' }); ul(b.pengawas2, cxR, y); } else doc.text('(................................)', cxR, y, { align: 'center' });
+  doc.setFont('times', 'normal');
+  if (b.pengawasNip) doc.text('NIP. ' + b.pengawasNip, cxL, y + 5, { align: 'center' });
+  y += 16;
+  doc.text('Mengetahui,', W / 2, y, { align: 'center' }); y += 5.5; doc.text('Kepala Sekolah', W / 2, y, { align: 'center' }); y += 22;
+  doc.setFont('times', 'bold');
+  const ks = st.kepsek || '(................................)';
+  doc.text(ks, W / 2, y, { align: 'center' }); if (st.kepsek) ul(ks, W / 2, y);
+  doc.setFont('times', 'normal'); if (st.nipKepsek) doc.text('NIP. ' + st.nipKepsek, W / 2, y + 5, { align: 'center' });
+
+  doc.save(`BAP_${safeName(b.mapelNama)}_${safeName(b.ruangNama)}_${b.tanggal}.pdf`);
+}
+async function pdfSafe(b) { try { await withLoad(() => makePdf(b)); } catch (e) { toast(e.message || 'Gagal membuat PDF.', 'err'); } }
+
+/* ================= SHELL & RENDER ================= */
+const bannerHtml = () => IS_PREVIEW ? '<div class="pbanner">MODE PREVIEW · data hanya disimpan sementara di memori dan tidak terhubung ke Firebase</div>' : '';
+function bnav() {
+  const u = S.user, b = (act, v, icn, lbl) => `<button class="${act === 'go' && S.page === v ? 'on' : ''}" data-act="${act}" ${v ? `data-v="${v}"` : ''}>${ic(icn, 22)}<span>${lbl}</span></button>`;
+  if (u.role === 'admin') return `<nav class="bnav">${b('go', 'dash', 'home', 'Beranda')}${b('go', 'master', 'layers', 'Master')}<button class="fab" data-act="go" data-v="jadwal" aria-label="Jadwal ujian">${ic('calendar', 26)}</button>${b('go', 'rekap', 'file', 'Rekap')}${b('go', 'set', 'sliders', 'Atur')}</nav>`;
+  return `<nav class="bnav">${b('go', 'home', 'home', 'Beranda')}${b('go', 'riwayat', 'file', 'Riwayat')}<button class="fab" data-act="go" data-v="bap" aria-label="Isi BAP">${ic('plus', 28)}</button>${b('go', 'akun', 'user', 'Akun')}${b('logout', '', 'logout', 'Keluar')}</nav>`;
+}
+function render() {
+  const r = $('#bap-root');
+  if (!S.user) { r.innerHTML = bannerHtml() + viewLogin(); return; }
+  const u = S.user, nav = NAV[u.role], v = VIEWS[S.page] ? VIEWS[S.page]() : '';
+  const side = `<aside class="side"><div class="sbrand">${brandMark(40)}<div><b>BAP Ujian</b><small>${esc(S.data.settings.nama || '')}</small></div></div>${nav.map(n => `<button class="sn ${S.page === n[0] ? 'on' : ''}" data-act="go" data-v="${n[0]}">${ic(n[2])}<span>${n[1]}</span></button>`).join('')}<div class="sfoot"><div class="uchip"><div class="av">${esc(initial(u.nama))}</div><div><b>${esc(u.nama)}</b><small>${u.role === 'admin' ? 'Administrator' : 'Pengawas'}</small></div></div><button class="sn" data-act="logout">${ic('logout')}<span>Keluar</span></button></div></aside>`;
+  r.innerHTML = `${bannerHtml()}<div class="shell">${side}<main class="main" id="main"><div class="wrap">${v}</div></main></div>${bnav()}`;
+}
+async function go(p) {
+  closeModal(); S.page = p;
+  if (p === 'master' && ['siswa', 'kelas'].includes(S.ui.mtab)) await ensureSiswa();
+  render(); const m = $('#main'); if (m) m.scrollTop = 0;
+}
+async function startSession() {
+  await withLoad(loadData);
+  S.page = S.user.role === 'admin' ? 'dash' : 'home'; render();
+}
+
+/* ================= EVENTS ================= */
+const ACT = {
+  ltab: t => { S.ui.ltab = t.dataset.v; S.ui.cfgErr = S.ui.cfgErr; render(); },
+  go: t => guard(() => { S.form = null; return go(t.dataset.v); }),
+  logout: () => guard(() => logout()),
+  mclose: () => closeModal(),
+  'mclose-bg': (t, e) => { if (e.target === t) closeModal(); },
+  mok: async () => { const f = S.modal && S.modal.ok; closeModal(); if (f) await f(); },
+  mtab: async t => { S.ui.mtab = t.dataset.v; S.ui.msearch = ''; S.ui.mkelas = ''; await go('master'); },
+  madd: () => openMaster(S.ui.mtab),
+  medit: t => openMaster(S.ui.mtab, t.dataset.id),
+  mdel: t => deleteMaster(t.dataset.id),
+  mimport: () => openImport(),
+  jmode: t => { S.ui.jmode = t.dataset.v; render(); },
+  jadd: () => openJadwal(),
+  jedit: t => openJadwal(t.dataset.id),
+  jdel: t => deleteJadwal(t.dataset.id),
+  rview: t => { const b = S.data.bap.find(x => x.id === t.dataset.id); if (b) viewBapModal(b); },
+  rpdf: async t => { const b = S.data.bap.find(x => x.id === t.dataset.id); if (b) await pdfSafe(b); },
+  runlock: t => confirmBox('Buka kunci BAP ini agar pengawas dapat mengubahnya kembali (status menjadi Draf)?', async () => {
+    const id = t.dataset.id, b = S.data.bap.find(x => x.id === id); if (!b) return;
+    const now = new Date().toISOString(); await DB.update('bap', id, { status: 'draf', diubahPada: now });
+    upsertLocal('bap', { ...b, status: 'draf', diubahPada: now }); render(); toast('BAP dibuka kembali sebagai draf.');
+  }, 'Buka kunci'),
+  rdel: t => confirmBox('Hapus BAP ini secara permanen?', async () => {
+    const id = t.dataset.id; await DB.del('bap', id); S.data.bap = S.data.bap.filter(x => x.id !== id); render(); toast('BAP dihapus.');
+  }, 'Hapus'),
+  logodel: () => { S.ui.logoTmp = ''; const el = $('#logoPrev'); if (el) el.textContent = 'Belum ada'; },
+  bopen: t => openBapForm(t.dataset.id),
+  bback: () => guard(() => { S.form = null; render(); }),
+  st: t => {
+    const F = S.form; if (!F || F.status === 'final') return;
+    const sid = t.dataset.sid, m = F.kehadiranMap[sid] || (F.kehadiranMap[sid] = { status: 'H', ket: '' });
+    m.status = t.dataset.v; F.dirty = true; refreshSiswa();
+  },
+  kdel: t => { const F = S.form; F.kelas = F.kelas.filter(k => k !== t.dataset.v); F.dirty = true; refreshKelas(); },
+  bsave: () => saveBap(false),
+  bfinal: () => saveBap(true),
+  bpdf: async () => { const e = validateBap(false); if (e) { toast(e, 'err'); return; } await pdfSafe(collectBap()); }
+};
+const FORM = {
+  login: async f => {
+    const fd = Object.fromEntries(new FormData(f)), err = $('#lerr'), btn = f.querySelector('[type=submit]');
+    err.hidden = true; S.ui.cfgErr = '';
+    if (!IS_PREVIEW && (!fb || firebaseConfig.apiKey === 'API_KEY_ANDA')) { err.textContent = 'Konfigurasi Firebase belum diisi. Isi firebaseConfig pada kode lalu muat ulang.'; err.hidden = false; return; }
+    btn.disabled = true;
+    try {
+      await withLoad(async () => { if (S.ui.ltab === 'admin') await loginAdmin(fd.email, fd.password); else await loginPengawas(fd.username, fd.password); });
+      await startSession();
+    } catch (e) {
+      if (!IS_PREVIEW && S.user && S.user.role === 'admin' && fb) { try { await fb.authM.signOut(fb.auth); } catch (x) { /* abaikan */ } }
+      S.user = null; err.textContent = authMsg(e); err.hidden = false;
+    } finally { btn.disabled = false; }
+  },
+  modal: async f => {
+    const btn = f.querySelector('[type=submit]'); if (btn) btn.disabled = true;
+    try { await S.modal.submit(new FormData(f), f); } catch (e) { toast(authMsg(e), 'err'); } finally { if (btn) btn.disabled = false; }
+  },
+  settings: async f => {
+    const fd = Object.fromEntries(new FormData(f)), btn = f.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      const data = { nama: fd.nama.trim(), alamat: (fd.alamat || '').trim(), kota: (fd.kota || '').trim(), tahunAjaran: (fd.tahunAjaran || '').trim(), jenisUjian: fd.jenisUjian.trim(), kertas: fd.kertas === 'F4' ? 'F4' : 'A4', kepsek: (fd.kepsek || '').trim(), nipKepsek: (fd.nipKepsek || '').trim(), logo: S.ui.logoTmp !== null ? S.ui.logoTmp : (S.data.settings.logo || '') };
+      await withLoad(() => DB.set('settings', 'sekolah', data));
+      S.data.settings = { ...data, id: 'sekolah' }; S.ui.logoTmp = null; render(); toast('Pengaturan tersimpan.');
+    } catch (e) { toast(authMsg(e), 'err'); } finally { btn.disabled = false; }
+  }
+};
+const CHANGE = {
+  mkelas: t => { S.ui.mkelas = t.value; $('#mlist').innerHTML = masterList(); },
+  rf: t => { S.ui.rf[t.dataset.k] = t.value; $('#rlist').innerHTML = rekapList(); },
+  kadd: async t => {
+    const v = t.value; if (!v) return; const F = S.form;
+    await withLoad(() => setKelas([...F.kelas, v])); F.dirty = true; refreshKelas();
+  },
+  fruang: async t => {
+    const F = S.form; F.ruangId = t.value; F.dirty = true;
+    const r = S.data.ruang.find(x => x.id === t.value);
+    if (r && r.kelasBawaan && r.kelasBawaan.length) await withLoad(() => setKelas(r.kelasBawaan.filter(n => S.data.kelas.some(k => k.nama === n))));
+    refreshKelas();
+  },
+  impfile: t => {
+    const file = t.files && t.files[0]; if (!file) return;
+    const fr = new FileReader(); fr.onload = () => { const ta = $('#imptxt'); if (ta) ta.value = String(fr.result || ''); }; fr.readAsText(file);
+  },
+  logo: async t => {
+    const file = t.files && t.files[0]; if (!file) return;
+    try {
+      S.ui.logoTmp = await new Promise((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => { const img = new Image(); img.onload = () => { const s = Math.min(1, 200 / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s)); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL('image/png')); }; img.onerror = () => rej(new Error('File bukan gambar yang valid.')); img.src = fr.result; };
+        fr.onerror = () => rej(new Error('Gagal membaca file.')); fr.readAsDataURL(file);
+      });
+      const el = $('#logoPrev'); if (el) el.innerHTML = `<img src="${esc(S.ui.logoTmp)}" alt="Logo">`;
+    } catch (e) { toast(e.message, 'err'); }
+  }
+};
+const report = e => toast((e && e.message) || 'Terjadi kesalahan.', 'err');
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
+  const fn = ACT[t.dataset.act]; if (!fn) return;
+  try { const r = fn(t, e); if (r && r.catch) r.catch(report); } catch (x) { report(x); }
+});
+document.addEventListener('submit', e => {
+  const f = e.target.closest('form[data-form]'); if (!f) return;
+  e.preventDefault(); const h = FORM[f.dataset.form]; if (h) h(f).catch(report);
+});
+document.addEventListener('change', e => {
+  const t = e.target, k = t.dataset && t.dataset.ch; if (!k || !CHANGE[k]) return;
+  try { const r = CHANGE[k](t); if (r && r.catch) r.catch(report); } catch (x) { report(x); }
+});
+document.addEventListener('input', e => {
+  const t = e.target, f = t.dataset && t.dataset.f; if (!f) return;
+  const F = S.form;
+  if (['mulai', 'selesai', 'jumlahLJK', 'catatan', 'pengawas2'].includes(f) && F) { F[f] = t.value; F.dirty = true; }
+  else if (f === 'ket' && F) { const m = F.kehadiranMap[t.dataset.sid]; if (m) { m.ket = t.value; F.dirty = true; } }
+  else if (f === 'msearch') { S.ui.msearch = t.value; $('#mlist').innerHTML = masterList(); }
+  else if (f === 'rq') { S.ui.rf.q = t.value; $('#rlist').innerHTML = rekapList(); }
+});
+
+/* ================= PWA (1 file) ================= */
+function registerSW() {
+  try {
+    if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+    const code = "const C='bap-shell-v1';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||r.mode!=='navigate')return;e.respondWith(fetch(r).then(res=>{const cp=res.clone();caches.open(C).then(c=>c.put(r,cp));return res}).catch(()=>caches.match(r)))});";
+    const url = URL.createObjectURL(new Blob([code], { type: 'text/javascript' }));
+    navigator.serviceWorker.register(url).catch(() => { /* beberapa browser menolak SW dari Blob; aplikasi tetap berjalan */ });
+  } catch (e) { /* abaikan */ }
+}
+
+/* ================= PREVIEW SEED (hanya IS_PREVIEW = true) ================= */
+async function seedPreview() {
+  const t = todayStr(), salt = newSalt();
+  MEM.settings = { sekolah: { nama: 'SMA Negeri 1 Contoh', alamat: 'Jl. Pendidikan No. 1, Kota Contoh', kota: 'Kota Contoh', kepsek: 'Drs. Contoh Kepala, M.Pd.', nipKepsek: '196501011990031001', jenisUjian: 'Asesmen Sumatif Akhir Semester', tahunAjaran: '2026/2027', kertas: 'A4', logo: '' } };
+  MEM.mapel = { m1: { nama: 'Matematika', kode: 'MTK' }, m2: { nama: 'Bahasa Indonesia', kode: 'BIN' } };
+  MEM.kelas = { k1: { nama: 'X-1' }, k2: { nama: 'X-2' } };
+  MEM.ruang = { r1: { nama: 'Ruang 01', kelasBawaan: ['X-1', 'X-2'] }, r2: { nama: 'Ruang 02', kelasBawaan: ['X-2'] } };
+  MEM.siswa = { s1: { nis: '1001', nama: 'Ahmad Fauzi', kelas: 'X-1' }, s2: { nis: '1002', nama: 'Siti Rahma', kelas: 'X-2' } };
+  MEM.pengawas = { budi: { username: 'budi', nama: 'Budi Santoso, S.Pd.', nip: '198001012005011001', aktif: true, salt, hash: await hashPw('pengawas123', salt) } };
+  const jd = { pengawasId: 'budi', pengawasNama: 'Budi Santoso, S.Pd.', pengawas2: '', ruangId: 'r1', ruangNama: 'Ruang 01', tanggal: t };
+  MEM.jadwal = { j1: { ...jd, jamMulai: '07:30', jamSelesai: '09:30', mapelId: 'm1', mapelNama: 'Matematika' }, j2: { ...jd, jamMulai: '10:00', jamSelesai: '12:00', mapelId: 'm2', mapelNama: 'Bahasa Indonesia' } };
+  MEM.bap = {
+    j2: {
+      jadwalId: 'j2', tanggal: t, mapelNama: 'Bahasa Indonesia', ruangId: 'r1', ruangNama: 'Ruang 01', kelas: ['X-1', 'X-2'],
+      rekapKelas: [{ kelas: 'X-1', seharusnya: 1, hadir: 1, tidakHadir: 0 }, { kelas: 'X-2', seharusnya: 1, hadir: 0, tidakHadir: 1 }],
+      jumlahSeharusnya: 2, hadir: 1, tidakHadir: 1,
+      kehadiran: [{ siswaId: 's1', nis: '1001', nama: 'Ahmad Fauzi', kelas: 'X-1', status: 'H', ket: '' }, { siswaId: 's2', nis: '1002', nama: 'Siti Rahma', kelas: 'X-2', status: 'S', ket: 'Surat dokter' }],
+      mulai: '10:00', selesai: '12:00', jumlahLJK: 1, catatan: 'Ujian berjalan lancar.', pengawasId: 'budi', pengawasNama: 'Budi Santoso, S.Pd.', pengawasNip: '198001012005011001', pengawas2: '', status: 'final',
+      dibuatPada: new Date().toISOString(), diubahPada: new Date().toISOString()
+    }
+  };
+}
+
+/* ================= BOOT ================= */
+async function boot() {
+  registerSW(); render();
+  if (IS_PREVIEW) { try { await seedPreview(); } catch (e) { S.ui.cfgErr = 'Mode preview gagal disiapkan: ' + e.message; render(); } return; }
+  if (firebaseConfig.apiKey === 'API_KEY_ANDA') { S.ui.cfgErr = 'Konfigurasi Firebase belum diisi. Isi firebaseConfig pada kode lalu muat ulang.'; render(); return; }
+  try {
+    await withLoad(initFirebase);
+    const u = await new Promise(res => { const un = fb.authM.onAuthStateChanged(fb.auth, x => { un(); res(x); }); });
+    if (u) { S.user = { role: 'admin', id: u.uid, nama: u.displayName || u.email, email: u.email }; await startSession(); }
+  } catch (e) { S.user = null; S.ui.cfgErr = authMsg(e); render(); }
+}
+boot();
+</script>
+</body>
+</html>
