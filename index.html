@@ -163,6 +163,17 @@ small{font-size:12px;color:var(--mut)}
 .adet{flex-basis:100%;margin:-4px 0 0 32px;font-size:12px;color:var(--mut)}
 .dpick{padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:0}
 .dpick:focus{border-color:var(--pri)}
+.pw{position:relative}.pw input{padding-right:46px}
+.pwb{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;display:grid;place-items:center;color:var(--mut);border-radius:10px}
+.pwb:hover{color:var(--pri)}
+.acc{width:100%;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.acc[aria-expanded=false]{border-bottom:0}
+.accl{display:flex;flex-direction:column;min-width:0}.accl small{font-size:11px}
+.accr{display:flex;align-items:center;gap:6px;flex:none}
+.chev{display:grid;color:var(--mut);transition:transform .15s}.chev.up{transform:rotate(180deg)}
+.pad{display:block;width:100%;aspect-ratio:3/1;background:#fff;border:1px dashed var(--peri);border-radius:14px;touch-action:none;cursor:crosshair}
+.ttdv{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;display:grid;place-items:center;min-height:60px}
+.ttdv img{max-width:100%;max-height:120px}
 @media print{#bap-root{display:none}}
 </style>
 </head>
@@ -248,6 +259,9 @@ const MEM = {}; // hanya dipakai saat IS_PREVIEW = true
 const JAM_OPTS = Array.from({ length: 10 }, (_, i) => [String(i + 1), 'Jam ke-' + (i + 1)]);
 const jamLbl = j => (j && j.jamKe ? 'Jam ke-' + j.jamKe : '');
 const numOrNull = v => (v === '' || v == null || isNaN(Number(v)) ? null : Number(v));
+ICONS.eyeoff = '<path d="M3 3l18 18M10.6 5.1A10.7 10.7 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s4 7 10 7a10 10 0 0 0 4.4-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+ICONS.chev = '<path d="m6 9 6 6 6-6"/>';
+const logoImg = (z = 44) => { const l = (S.data.settings || {}).logo; return l ? `<img src="${esc(l)}" alt="Logo sekolah" style="width:${z}px;height:${z}px;object-fit:contain;border-radius:${Math.round(z / 4)}px">` : brandMark(z); };
 
 /* ================= DATA LAYER ================= */
 const clean = o => { const c = JSON.parse(JSON.stringify(o)); delete c.id; return c; };
@@ -305,12 +319,13 @@ async function initFirebase() {
 
 /* ================= AUTH ================= */
 async function hashPw(pw, salt) {
+  if (IS_PREVIEW) return 'preview:' + pw; // mode uji coba: data hanya di memori, tidak butuh kriptografi (jalan di HTTP maupun HTTPS)
   if (!(window.crypto && crypto.subtle)) throw new Error('Browser tidak mendukung enkripsi. Buka aplikasi lewat HTTPS.');
   const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(salt), iterations: 120000 }, k, 256);
   return b64(new Uint8Array(bits));
 }
-const newSalt = () => b64(crypto.getRandomValues(new Uint8Array(16)));
+const newSalt = () => (IS_PREVIEW ? 'preview' : b64(crypto.getRandomValues(new Uint8Array(16))));
 const USER_RE = /^[a-z0-9._-]{3,30}$/;
 
 async function loginAdmin(email, pw) {
@@ -343,7 +358,7 @@ const authMsg = e => {
 async function logout() {
   if (!IS_PREVIEW && S.user && S.user.role === 'admin' && fb) { try { await fb.authM.signOut(fb.auth); } catch (e) { /* abaikan */ } }
   S.user = null; S.form = null; S.page = ''; S.siswaLoaded = false;
-  S.data = { settings: {}, mapel: [], ruang: [], kelas: [], siswa: [], pengawas: [], jadwal: [], bap: [] };
+  S.data = { settings: S.data.settings || {}, mapel: [], ruang: [], kelas: [], siswa: [], pengawas: [], jadwal: [], bap: [] };
   closeModal(); render();
 }
 
@@ -409,9 +424,10 @@ function confirmBox(msg, ok, label = 'Ya, lanjutkan') {
 }
 const fld = (label, name, val = '', o = {}) => {
   const attr = `${o.req ? 'required' : ''} ${o.attr || ''}`;
+  const inp = `<input name="${name}" type="${o.type || 'text'}" value="${esc(val)}" ${o.ph ? `placeholder="${esc(o.ph)}"` : ''} ${attr}>`;
   const inner = o.type === 'textarea'
     ? `<textarea name="${name}" rows="${o.rows || 3}" ${attr}>${esc(val)}</textarea>`
-    : `<input name="${name}" type="${o.type || 'text'}" value="${esc(val)}" ${o.ph ? `placeholder="${esc(o.ph)}"` : ''} ${attr}>`;
+    : o.type === 'password' ? `<div class="pw">${inp}<button type="button" class="pwb" data-act="pwtoggle" aria-label="Tampilkan password">${ic('eye', 18)}</button></div>` : inp;
   return `<label class="fld ${o.cls || ''}"><span>${esc(label)}</span>${inner}</label>`;
 };
 const optsHtml = (options, val, blank) => (blank === false ? '' : `<option value="">${esc(typeof blank === 'string' ? blank : '— Pilih —')}</option>`) + options.map(([v, t]) => `<option value="${esc(v)}" ${String(v) === String(val) ? 'selected' : ''}>${esc(t)}</option>`).join('');
@@ -432,7 +448,7 @@ const VIEWS = {};
 
 function viewLogin() {
   const adm = S.ui.ltab === 'admin';
-  return `<div class="login"><div class="lcard"><div class="lbrand">${brandMark(54)}<h1>BAP Ujian</h1><p>Berita Acara Pelaksanaan Ujian</p></div>
+  return `<div class="login"><div class="lcard"><div class="lbrand">${logoImg(72)}<h1>BAP Ujian</h1>${S.data.settings.nama ? `<p style="font-weight:700;color:var(--ink)">${esc(S.data.settings.nama)}</p>` : ''}<p>Berita Acara Pelaksanaan Ujian</p></div>
   <div class="tabs"><button class="${!adm ? 'on' : ''}" data-act="ltab" data-v="ruang">Ruang</button><button class="${adm ? 'on' : ''}" data-act="ltab" data-v="admin">Admin</button></div>
   <form data-form="login" autocomplete="on">
   ${adm ? fld('Email', 'email', '', { type: 'email', req: 1, attr: 'autocomplete="username"' }) : fld('Username ruang', 'username', '', { req: 1, attr: 'autocapitalize="none" autocomplete="username"' })}
@@ -764,7 +780,7 @@ function rekapList() {
 }
 function viewBapModal(b) {
   const tdh = (b.kehadiran || []).filter(r => r.status !== 'H');
-  openModal('Detail BAP', `<div class="kv"><span>Mata pelajaran</span><span>${esc(b.mapelNama)}</span><span>Tanggal</span><span>${esc(hariTgl(b.tanggal))}</span><span>Jam ke-</span><span>${b.jamKe || '-'}</span><span>Waktu</span><span>${esc(b.mulai)} – ${esc(b.selesai)} WIB</span><span>Ruang</span><span>${esc(b.ruangNama)}</span><span>Kelas</span><span>${esc((b.kelas || []).join(', '))}</span><span>Pengawas</span><span>${esc(b.pengawasNama || '-')}</span>${b.pengawas2 ? `<span>Pengawas kedua</span><span>${esc(b.pengawas2)}</span>` : ''}<span>Jumlah soal</span><span>${b.jumlahSoal == null ? '-' : esc(b.jumlahSoal)}</span><span>Lembar jawaban</span><span>${b.jumlahLJK == null ? '-' : esc(b.jumlahLJK)}</span><span>Kode soal</span><span>${esc(b.kodeSoal || '-')}</span><span>Status</span><span>${stChip(b)}</span></div>
+  openModal('Detail BAP', `<div class="kv"><span>Mata pelajaran</span><span>${esc(b.mapelNama)}</span><span>Tanggal</span><span>${esc(hariTgl(b.tanggal))}</span><span>Jam ke-</span><span>${b.jamKe || '-'}</span><span>Waktu</span><span>${esc(b.mulai)} – ${esc(b.selesai)} WIB</span><span>Ruang</span><span>${esc(b.ruangNama)}</span><span>Kelas</span><span>${esc((b.kelas || []).join(', '))}</span><span>Pengawas</span><span>${esc(b.pengawasNama || '-')}</span>${b.pengawas2 ? `<span>Pengawas kedua</span><span>${esc(b.pengawas2)}</span>` : ''}<span>Status</span><span>${stChip(b)}</span></div>
   <table class="dtab"><tr><th>Kelas</th><th>Seharusnya</th><th>Hadir</th><th>Tidak hadir</th></tr>${(b.rekapKelas || []).map(r => `<tr><td>${esc(r.kelas)}</td><td>${r.seharusnya}</td><td>${r.hadir}</td><td>${r.tidakHadir}</td></tr>`).join('')}<tr><th>Total</th><th>${b.jumlahSeharusnya}</th><th>${b.hadir}</th><th>${b.tidakHadir}</th></tr></table>
   <h3 class="sec">Peserta tidak hadir</h3>${tdh.length ? `<table class="dtab">${tdh.map(r => `<tr><td>${esc(r.nama)}<br><small>${esc(r.nis)} · ${esc(r.kelas)}</small></td><td>${esc(LBL[r.status])}${r.ket ? ' – ' + esc(r.ket) : ''}</td></tr>`).join('')}</table>` : '<p class="mut">Nihil.</p>'}
   <h3 class="sec">Catatan</h3><p style="white-space:pre-wrap">${esc(b.catatan || 'Tidak ada catatan.')}</p>
@@ -842,15 +858,14 @@ async function openBapForm(jadwalId) {
   if (!j && !ex) { toast('Jadwal tidak ditemukan.', 'err'); return; }
   if (ex) {
     const F = { ...clone(ex), jadwalId, kehadiranMap: {}, siswaKelas: {}, dirty: false };
-    F.jumlahSoal = F.jumlahSoal == null ? '' : F.jumlahSoal; F.jumlahLJK = F.jumlahLJK == null ? '' : F.jumlahLJK;
-    F.kodeSoal = F.kodeSoal || ''; F.pengawasId = F.pengawasId || ''; F.pengawas2Id = F.pengawas2Id || ''; F.jamKe = F.jamKe || '';
+    F.ttd = F.ttd || ''; F.ttd2 = F.ttd2 || ''; F.openK = {}; F.pengawasId = F.pengawasId || ''; F.pengawas2Id = F.pengawas2Id || ''; F.jamKe = F.jamKe || '';
     (ex.kehadiran || []).forEach(r => {
       F.kehadiranMap[r.siswaId] = { status: r.status, ket: r.ket || '' };
       (F.siswaKelas[r.kelas] = F.siswaKelas[r.kelas] || []).push({ siswaId: r.siswaId, nis: r.nis, nama: r.nama, kelas: r.kelas });
     });
     S.form = F;
   } else {
-    S.form = { jadwalId, tanggal: j.tanggal, mapelNama: j.mapelNama, ruangId: j.ruangId, ruangNama: j.ruangNama, jamKe: j.jamKe || '', mulai: j.jamMulai || '', selesai: j.jamSelesai || '', kelas: [], siswaKelas: {}, kehadiranMap: {}, jumlahSoal: '', jumlahLJK: '', kodeSoal: '', catatan: '', pengawasId: '', pengawasNama: '', pengawasNip: '', pengawas2Id: '', pengawas2: '', pengawas2Nip: '', status: 'draf', dirty: false };
+    S.form = { jadwalId, tanggal: j.tanggal, mapelNama: j.mapelNama, ruangId: j.ruangId, ruangNama: j.ruangNama, jamKe: j.jamKe || '', mulai: j.jamMulai || '', selesai: j.jamSelesai || '', kelas: [], siswaKelas: {}, kehadiranMap: {}, catatan: '', ttd: '', ttd2: '', openK: {}, pengawasId: '', pengawasNama: '', pengawasNip: '', pengawas2Id: '', pengawas2: '', pengawas2Nip: '', status: 'draf', dirty: false };
     const r = S.data.ruang.find(x => x.id === j.ruangId);
     if (r && r.kelasBawaan && r.kelasBawaan.length) await withLoad(() => setKelas(r.kelasBawaan.filter(n => S.data.kelas.some(k => k.nama === n))));
   }
@@ -884,7 +899,9 @@ function siswaBox() {
     const rows = F.siswaKelas[k] || []; let h = 0;
     rows.forEach(r => { if (((F.kehadiranMap[r.siswaId] || {}).status || 'H') === 'H') h++; });
     tot += rows.length; hd += h;
-    return `<div class="card grp"><div class="gh"><b>Kelas ${esc(k)}</b><span class="chip">${h}/${rows.length} hadir</span></div>${rows.length ? rows.map((r, i) => srow(r, i, ro)).join('') : '<div class="mut pad" style="padding:12px 16px">Belum ada siswa di kelas ini. Admin dapat menambahkannya di Data Master.</div>'}</div>`;
+    const open = !!(F.openK && F.openK[k]), ab = rows.length - h;
+    const body = rows.length ? rows.map((r, i) => srow(r, i, ro)).join('') : '<div class="mut pad" style="padding:12px 16px">Belum ada siswa di kelas ini. Admin dapat menambahkannya di Data Master.</div>';
+    return `<div class="card grp"><button type="button" class="gh acc" data-act="ktoggle" data-v="${esc(k)}" aria-expanded="${open}"><span class="accl"><b>Kelas ${esc(k)}</b><small>${rows.length} siswa · ketuk untuk ${open ? 'menutup' : 'membuka'} daftar</small></span><span class="accr">${ab ? `<span class="chip coral">${ab} tidak hadir</span>` : ''}<span class="chip">${h}/${rows.length} hadir</span><span class="chev ${open ? 'up' : ''}">${ic('chev', 18)}</span></span></button>${open ? body : ''}</div>`;
   }).join('');
   return `<div class="stats" style="margin-bottom:12px"><div class="stat"><small>Seharusnya</small><b>${tot}</b><i></i></div><div class="stat"><small>Hadir</small><b>${hd}</b><i style="background:var(--ok)"></i></div><div class="stat"><small>Tidak hadir</small><b>${tot - hd}</b><i style="background:var(--coral)"></i></div></div>${groups}`;
 }
@@ -904,15 +921,37 @@ function viewBapForm() {
     ${sel('Nama pengawas', 'pengawasId', pengOpts(F.pengawasId, F.pengawasNama), F.pengawasId, { blank: '— Pilih pengawas —', attr: `data-ch="fpeng" ${dis}` })}
     ${sel('Pengawas kedua (opsional)', 'pengawas2Id', pengOpts(F.pengawas2Id, F.pengawas2, F.pengawasId), F.pengawas2Id, { id: 'selP2', blank: '— Tidak ada —', attr: `data-ch="fpeng2" ${dis}` })}
     <div class="fld full"><span>Kelas (boleh lebih dari satu)</span><div id="kelasBox">${kelasBox()}</div></div>
-    ${fld('Jam mulai', 'mulai', F.mulai, { type: 'time', attr: `data-f="mulai" ${dis}` })}${fld('Jam selesai', 'selesai', F.selesai, { type: 'time', attr: `data-f="selesai" ${dis}` })}</div>
-    <h3 class="sec" style="margin-top:6px">Jumlah soal &amp; lembar jawaban / kode soal</h3>
-    <div class="g2">${fld('Jumlah soal', 'jumlahSoal', F.jumlahSoal, { type: 'number', attr: `data-f="jumlahSoal" min="0" inputmode="numeric" ${dis}` })}${fld('Jumlah lembar jawaban', 'jumlahLJK', F.jumlahLJK, { type: 'number', attr: `data-f="jumlahLJK" min="0" inputmode="numeric" ${dis}` })}${fld('Kode soal', 'kodeSoal', F.kodeSoal, { attr: `data-f="kodeSoal" placeholder="mis. A / B / 1" ${dis}` })}</div></div>
+    ${fld('Jam mulai', 'mulai', F.mulai, { type: 'time', attr: `data-f="mulai" ${dis}` })}${fld('Jam selesai', 'selesai', F.selesai, { type: 'time', attr: `data-f="selesai" ${dis}` })}</div></div>
     <div id="siswaBox">${siswaBox()}</div>
     <div class="card">${fld('Catatan selama pelaksanaan ujian', 'catatan', F.catatan, { type: 'textarea', rows: 4, attr: `data-f="catatan" ${dis}`, ph: 'Kosongkan jika tidak ada kejadian khusus' })}</div>
+    <div class="card" id="ttdCard"><div id="ttdBox">${ttdBox()}</div></div>
     <div class="bar">${ro ? '' : '<button class="btn" data-act="bsave">Simpan Draf</button><button class="btn pri" data-act="bfinal">Finalkan BAP</button>'}<button class="btn ghost" data-act="bpdf">${ic('download', 18)}Cetak PDF</button></div>`;
 }
 const refreshSiswa = () => { const el = $('#siswaBox'); if (el) el.innerHTML = siswaBox(); };
 const refreshKelas = () => { const k = $('#kelasBox'); if (k) k.innerHTML = kelasBox(); refreshSiswa(); };
+function ttdBox() {
+  const F = S.form, ro = F.status === 'final';
+  const one = (key, label) => ro
+    ? `<div class="fld"><span>${esc(label)}</span><div class="ttdv">${F[key] ? `<img src="${esc(F[key])}" alt="Tanda tangan">` : '<small>Tidak ada tanda tangan</small>'}</div></div>`
+    : `<div class="fld"><span>${esc(label)}</span><canvas class="pad" data-pad="${key}" width="600" height="200" aria-label="Kotak tanda tangan"></canvas><button type="button" class="btn" style="padding:6px 12px;align-self:flex-start" data-act="padclear" data-v="${key}">Hapus tanda tangan</button></div>`;
+  const n1 = pgOf(F.pengawasId, F.pengawasNama, F.pengawasNip).nama, n2 = pgOf(F.pengawas2Id, F.pengawas2, F.pengawas2Nip).nama;
+  return (ro ? '' : '<small style="display:block;margin-bottom:10px">Tanda tangan dengan jari atau mouse pada kotak di bawah.</small>') +
+    one('ttd', 'Tanda tangan pengawas' + (n1 ? ' – ' + n1 : '')) + (F.pengawas2Id ? one('ttd2', 'Tanda tangan pengawas kedua' + (n2 ? ' – ' + n2 : '')) : '');
+}
+function initPads() {
+  document.querySelectorAll('canvas.pad').forEach(cv => {
+    const key = cv.dataset.pad, F = S.form, ctx = cv.getContext('2d');
+    ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#111';
+    if (F[key]) { const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, cv.width, cv.height); img.src = F[key]; }
+    let drawing = false, last = null;
+    const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; };
+    cv.onpointerdown = e => { drawing = true; last = pos(e); try { cv.setPointerCapture(e.pointerId); } catch (x) { /* abaikan */ } ctx.beginPath(); ctx.moveTo(last[0], last[1]); ctx.lineTo(last[0] + 0.1, last[1] + 0.1); ctx.stroke(); e.preventDefault(); };
+    cv.onpointermove = e => { if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(last[0], last[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); last = p; e.preventDefault(); };
+    const end = () => { if (!drawing) return; drawing = false; F[key] = cv.toDataURL('image/png'); F.dirty = true; };
+    cv.onpointerup = end; cv.onpointercancel = end;
+  });
+}
+const refreshTtd = () => { const el = $('#ttdBox'); if (el) { el.innerHTML = ttdBox(); initPads(); } };
 const pgOf = (id, nama, nip) => { const p = S.data.pengawas.find(x => x.id === id); return p ? { nama: p.nama, nip: p.nip || '' } : { nama: id ? nama || '' : '', nip: id ? nip || '' : '' }; };
 function collectBap() {
   const F = S.form, kehadiran = [], rekap = [];
@@ -930,7 +969,7 @@ function collectBap() {
   return {
     jadwalId: F.jadwalId, tanggal: F.tanggal, mapelNama: F.mapelNama, ruangId: F.ruangId, ruangNama: rg ? rg.nama : (F.ruangNama || ''),
     jamKe: numOrNull(F.jamKe), kelas: [...F.kelas], rekapKelas: rekap, jumlahSeharusnya: tot, hadir: hd, tidakHadir: tot - hd, kehadiran,
-    mulai: F.mulai, selesai: F.selesai, jumlahSoal: numOrNull(F.jumlahSoal), jumlahLJK: numOrNull(F.jumlahLJK), kodeSoal: (F.kodeSoal || '').trim(),
+    mulai: F.mulai, selesai: F.selesai, ttd: F.ttd || '', ttd2: F.pengawas2Id ? F.ttd2 || '' : '',
     catatan: (F.catatan || '').trim(), pengawasId: F.pengawasId || '', pengawasNama: p1.nama, pengawasNip: p1.nip,
     pengawas2Id: F.pengawas2Id || '', pengawas2: p2.nama, pengawas2Nip: p2.nip, status: F.status
   };
@@ -941,10 +980,10 @@ function validateBap(fin) {
   if (F.pengawas2Id && F.pengawas2Id === F.pengawasId) return 'Pengawas kedua tidak boleh sama dengan pengawas pertama.';
   if (!fin) return '';
   if (!F.pengawasId) return 'Pilih nama pengawas.';
+  if (!F.ttd) return 'Tanda tangan pengawas belum diisi.';
   if (!F.jamKe) return 'Pilih jam ke-.';
   if (!F.mulai || !F.selesai) return 'Isi jam mulai dan jam selesai.';
   if (F.selesai <= F.mulai) return 'Jam selesai harus setelah jam mulai.';
-  if ((F.jumlahSoal !== '' && Number(F.jumlahSoal) < 0) || (F.jumlahLJK !== '' && Number(F.jumlahLJK) < 0)) return 'Jumlah soal atau lembar jawaban tidak valid.';
   if (F.kelas.every(k => !(F.siswaKelas[k] || []).length)) return 'Kelas terpilih belum memiliki siswa.';
   return '';
 }
@@ -1016,9 +1055,6 @@ async function makePdf(b) {
   const rows = [['Ruang ujian', ': ' + b.ruangNama], ['Kelas', ': ' + (b.kelas || []).join(', ')]];
   if (b.jamKe) rows.push(['Jam pelaksanaan', ': Jam ke-' + b.jamKe]);
   rows.push(['Jumlah peserta seharusnya', `: ${b.jumlahSeharusnya} orang`], ['Jumlah peserta hadir', `: ${b.hadir} orang`], ['Jumlah peserta tidak hadir', `: ${b.tidakHadir} orang`]);
-  if (b.jumlahSoal != null) rows.push(['Jumlah soal', `: ${b.jumlahSoal} butir`]);
-  rows.push(['Jumlah lembar jawaban', `: ${b.jumlahLJK == null ? '-' : b.jumlahLJK + ' lembar'}`]);
-  if (b.kodeSoal) rows.push(['Kode soal', ': ' + b.kodeSoal]);
   doc.autoTable({ startY: y, theme: 'plain', margin: { left: mL, right: mR }, styles: { font: 'times', fontSize: 11, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 1 }, textColor: 0 }, columnStyles: { 0: { cellWidth: 62 }, 1: { cellWidth: cw - 62 } }, body: rows });
   y = doc.lastAutoTable.finalY + 5;
 
@@ -1049,7 +1085,8 @@ async function makePdf(b) {
 
   need(95);
   const cxL = mL + cw * 0.25, cxR = mL + cw * 0.75, ctr = { align: 'center' };
-  const signName = (name, nip, x, yy) => {
+  const signName = (name, nip, x, yy, ttd) => {
+    if (ttd) { try { doc.addImage(ttd, 'PNG', x - 20, yy - 17, 40, 13.3); } catch (e) { /* tanda tangan diabaikan */ } }
     doc.setFont('times', 'bold');
     if (name) { doc.text(name, x, yy, ctr); const w = doc.getTextWidth(name); doc.line(x - w / 2, yy + 0.8, x + w / 2, yy + 0.8); } else doc.text('(................................)', x, yy, ctr);
     doc.setFont('times', 'normal'); if (nip) doc.text('NIP. ' + nip, x, yy + 5, ctr);
@@ -1059,13 +1096,13 @@ async function makePdf(b) {
   doc.text(dateline, cxR, y, ctr); y += 6;
   if (b.pengawas2) {
     doc.text('Pengawas 1', cxL, y, ctr); doc.text('Pengawas 2', cxR, y, ctr); y += 22;
-    signName(b.pengawasNama, b.pengawasNip, cxL, y); signName(b.pengawas2, b.pengawas2Nip, cxR, y);
+    signName(b.pengawasNama, b.pengawasNip, cxL, y, b.ttd); signName(b.pengawas2, b.pengawas2Nip, cxR, y, b.ttd2);
     y += 16; doc.text('Mengetahui,', W / 2, y, ctr); y += 5.5; doc.text('Kepala Sekolah', W / 2, y, ctr); y += 22;
     signName(st.kepsek, st.nipKepsek, W / 2, y);
   } else {
     doc.text('Mengetahui,', cxL, y, ctr); doc.text('Pengawas', cxR, y, ctr); y += 5.5;
     doc.text('Kepala Sekolah', cxL, y, ctr); y += 22;
-    signName(st.kepsek, st.nipKepsek, cxL, y); signName(b.pengawasNama, b.pengawasNip, cxR, y);
+    signName(st.kepsek, st.nipKepsek, cxL, y); signName(b.pengawasNama, b.pengawasNip, cxR, y, b.ttd);
   }
   doc.save(`BAP_${safeName(b.mapelNama)}_${safeName(b.ruangNama)}_${b.tanggal}.pdf`);
 }
@@ -1114,8 +1151,9 @@ function render() {
   const r = $('#bap-root');
   if (!S.user) { r.innerHTML = bannerHtml() + viewLogin(); return; }
   const u = S.user, nav = NAV[u.role], v = VIEWS[S.page] ? VIEWS[S.page]() : '';
-  const side = `<aside class="side"><div class="sbrand">${brandMark(40)}<div><b>BAP Ujian</b><small>${esc(S.data.settings.nama || '')}</small></div></div>${nav.map(n => `<button class="sn ${S.page === n[0] ? 'on' : ''}" data-act="go" data-v="${n[0]}">${ic(n[2])}<span>${n[1]}</span></button>`).join('')}<div class="sfoot"><div class="uchip"><div class="av">${esc(initial(u.nama))}</div><div><b>${esc(u.nama)}</b><small>${u.role === 'admin' ? 'Administrator' : 'Ruang ujian'}</small></div></div><button class="sn" data-act="logout">${ic('logout')}<span>Keluar</span></button></div></aside>`;
+  const side = `<aside class="side"><div class="sbrand">${logoImg(40)}<div><b>BAP Ujian</b><small>${esc(S.data.settings.nama || '')}</small></div></div>${nav.map(n => `<button class="sn ${S.page === n[0] ? 'on' : ''}" data-act="go" data-v="${n[0]}">${ic(n[2])}<span>${n[1]}</span></button>`).join('')}<div class="sfoot"><div class="uchip"><div class="av">${esc(initial(u.nama))}</div><div><b>${esc(u.nama)}</b><small>${u.role === 'admin' ? 'Administrator' : 'Ruang ujian'}</small></div></div><button class="sn" data-act="logout">${ic('logout')}<span>Keluar</span></button></div></aside>`;
   r.innerHTML = `${bannerHtml()}<div class="shell">${side}<main class="main" id="main"><div class="wrap">${v}</div></main></div>${bnav()}`;
+  if (S.page === 'bap' && S.form) initPads();
 }
 async function go(p) {
   closeModal(); S.page = p;
@@ -1165,6 +1203,15 @@ const ACT = {
     const sid = t.dataset.sid, m = F.kehadiranMap[sid] || (F.kehadiranMap[sid] = { status: 'H', ket: '' });
     m.status = t.dataset.v; F.dirty = true; refreshSiswa();
   },
+  pwtoggle: t => {
+    const i = t.parentElement.querySelector('input'), show = i.type === 'password';
+    i.type = show ? 'text' : 'password'; t.innerHTML = ic(show ? 'eyeoff' : 'eye', 18); t.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password');
+  },
+  ktoggle: t => { const F = S.form; F.openK = F.openK || {}; F.openK[t.dataset.v] = !F.openK[t.dataset.v]; refreshSiswa(); },
+  padclear: t => {
+    const cv = document.querySelector('canvas.pad[data-pad="' + t.dataset.v + '"]'); if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
+    S.form[t.dataset.v] = ''; S.form.dirty = true;
+  },
   kdel: t => { const F = S.form; F.kelas = F.kelas.filter(k => k !== t.dataset.v); F.dirty = true; refreshKelas(); },
   bsave: () => saveBap(false),
   bfinal: () => saveBap(true),
@@ -1208,8 +1255,9 @@ const CHANGE = {
     const F = S.form; F.pengawasId = t.value; F.dirty = true;
     if (F.pengawas2Id === t.value) { F.pengawas2Id = ''; F.pengawas2 = ''; F.pengawas2Nip = ''; }
     const p2 = $('#selP2'); if (p2) p2.innerHTML = optsHtml(pengOpts(F.pengawas2Id, F.pengawas2, F.pengawasId), F.pengawas2Id, '— Tidak ada —');
+    refreshTtd();
   },
-  fpeng2: t => { const F = S.form; F.pengawas2Id = t.value; F.dirty = true; if (!t.value) { F.pengawas2 = ''; F.pengawas2Nip = ''; } },
+  fpeng2: t => { const F = S.form; F.pengawas2Id = t.value; F.dirty = true; if (!t.value) { F.pengawas2 = ''; F.pengawas2Nip = ''; F.ttd2 = ''; } refreshTtd(); },
   kadd: async t => {
     const v = t.value; if (!v) return; const F = S.form;
     await withLoad(() => setKelas([...F.kelas, v])); F.dirty = true; refreshKelas();
@@ -1247,7 +1295,7 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => {
   const t = e.target, f = t.dataset && t.dataset.f; if (!f) return;
   const F = S.form;
-  if (['mulai', 'selesai', 'jumlahSoal', 'jumlahLJK', 'kodeSoal', 'catatan'].includes(f) && F) { F[f] = t.value; F.dirty = true; }
+  if (['mulai', 'selesai', 'catatan'].includes(f) && F) { F[f] = t.value; F.dirty = true; }
   else if (f === 'ket' && F) { const m = F.kehadiranMap[t.dataset.sid]; if (m) { m.ket = t.value; F.dirty = true; } }
   else if (f === 'msearch') { S.ui.msearch = t.value; $('#mlist').innerHTML = masterList(); }
   else if (f === 'jq') { S.ui.jq = t.value; $('#jlist').innerHTML = jadwalList(); }
@@ -1286,7 +1334,7 @@ async function seedPreview() {
       rekapKelas: [{ kelas: 'X-1', seharusnya: 1, hadir: 1, tidakHadir: 0 }, { kelas: 'X-2', seharusnya: 1, hadir: 0, tidakHadir: 1 }],
       jumlahSeharusnya: 2, hadir: 1, tidakHadir: 1,
       kehadiran: [{ siswaId: 's1', nis: '1001', nama: 'Ahmad Fauzi', kelas: 'X-1', status: 'H', ket: '' }, { siswaId: 's2', nis: '1002', nama: 'Siti Rahma', kelas: 'X-2', status: 'S', ket: 'Surat dokter' }],
-      mulai: '07:30', selesai: '09:30', jumlahSoal: 40, jumlahLJK: 1, kodeSoal: 'A', catatan: 'Ujian berjalan lancar.',
+      mulai: '07:30', selesai: '09:30', catatan: 'Ujian berjalan lancar.',
       pengawasId: 'p1', pengawasNama: 'Budi Santoso, S.Pd.', pengawasNip: '198001012005011001', pengawas2Id: '', pengawas2: '', pengawas2Nip: '', status: 'final', dibuatPada: now, diubahPada: now
     }
   };
@@ -1295,10 +1343,11 @@ async function seedPreview() {
 /* ================= BOOT ================= */
 async function boot() {
   registerSW(); render();
-  if (IS_PREVIEW) { try { await seedPreview(); } catch (e) { S.ui.cfgErr = 'Mode preview gagal disiapkan: ' + e.message; render(); } return; }
+  if (IS_PREVIEW) { try { await seedPreview(); S.data.settings = clone(MEM.settings.sekolah); render(); } catch (e) { S.ui.cfgErr = 'Mode preview gagal disiapkan: ' + e.message; render(); } return; }
   if (firebaseConfig.apiKey === 'API_KEY_ANDA') { S.ui.cfgErr = 'Konfigurasi Firebase belum diisi. Isi firebaseConfig pada kode lalu muat ulang.'; render(); return; }
   try {
     await withLoad(initFirebase);
+    try { const br = await DB.get('settings', 'sekolah'); if (br) { S.data.settings = br; render(); } } catch (e) { /* logo login tidak termuat */ }
     const u = await new Promise(res => { const un = fb.authM.onAuthStateChanged(fb.auth, x => { un(); res(x); }); });
     if (u) { S.user = { role: 'admin', id: u.uid, nama: u.displayName || u.email, email: u.email }; await startSession(); }
   } catch (e) { S.user = null; S.ui.cfgErr = authMsg(e); render(); }
