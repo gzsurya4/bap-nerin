@@ -163,6 +163,7 @@ small{font-size:12px;color:var(--mut)}
 .adet{flex-basis:100%;margin:-4px 0 0 32px;font-size:12px;color:var(--mut)}
 .dpick{padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:0}
 .dpick:focus{border-color:var(--pri)}
+.pchips{padding:12px 16px 14px;margin:0}
 .pw{position:relative}.pw input{padding-right:46px}
 .pwb{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;display:grid;place-items:center;color:var(--mut);border-radius:10px}
 .pwb:hover{color:var(--pri)}
@@ -184,7 +185,7 @@ small{font-size:12px;color:var(--mut)}
 <div id="bap-load" hidden><div class="spin"></div></div>
 <script type="module">
 // KONFIGURASI APLIKASI
-const IS_PREVIEW = false; // Ubah menjadi false SAAT DEPLOY / PUBLISH agar terhubung murni ke Firebase tanpa data dummy
+const IS_PREVIEW = true; // Ubah menjadi false SAAT DEPLOY / PUBLISH agar terhubung murni ke Firebase tanpa data dummy
 
 // PASTE FIREBASE CONFIG ANDA DI SINI
 const firebaseConfig = {
@@ -248,7 +249,7 @@ const S = {
   data: { settings: {}, mapel: [], ruang: [], kelas: [], siswa: [], pengawas: [], jadwal: [], bap: [] },
   siswaLoaded: false, form: null, modal: null,
   ui: {
-    ltab: 'ruang', mtab: 'mapel', msearch: '', mkelas: '', jmode: 'upcoming', jq: '', dday: todayStr(),
+    ltab: 'ruang', mtab: 'mapel', msearch: '', mkelas: '', jmode: 'upcoming', jq: '', dday: todayStr(), dopen: {},
     rf: { dari: '', sampai: '', ruang: '', mapel: '', pengawas: '', jam: '', status: '', q: '' },
     hf: { dari: '', sampai: '', pengawas: '', jam: '', mapel: '', status: '' },
     logoTmp: null, cfgErr: ''
@@ -474,23 +475,32 @@ function absenRows(date) {
   return rows;
 }
 const itemTxt = i => `${i.jamKe ? 'Jam ' + i.jamKe + ' ' : ''}${i.mapel}: ${LBL[i.status]}${i.ket ? ' (' + i.ket + ')' : ''}`;
+const dOpen = (key, def) => (key in S.ui.dopen ? S.ui.dopen[key] : def);
 function absenList(rows) {
   if (!rows.length) return empty('Tidak ada siswa yang tercatat tidak hadir pada tanggal ini.');
   const g = new Map(); rows.forEach(r => { if (!g.has(r.kelas)) g.set(r.kelas, []); g.get(r.kelas).push(r); });
-  return [...g.entries()].map(([k, list]) => `<div class="card grp"><div class="gh"><b>Kelas ${esc(k)}</b><span class="chip coral">${list.length} siswa</span></div>${list.map((r, n) => `<div class="srow"><span class="sno">${n + 1}</span><div class="sinfo"><b>${esc(r.nama)}</b><small>${esc(r.nis)} · ${esc(r.ruang)}</small></div><div class="adet">${r.items.map(it => esc(itemTxt(it))).join('<br>')}</div></div>`).join('')}</div>`).join('');
+  const def = rows.length <= 10;
+  return [...g.entries()].map(([k, list]) => {
+    const key = 'abs:' + k, open = dOpen(key, def);
+    return `<div class="card grp"><button type="button" class="gh acc" data-act="dtoggle" data-v="${esc(key)}" data-d="${def ? 1 : 0}" aria-expanded="${open}"><span class="accl"><b>Kelas ${esc(k)}</b><small>${list.length} siswa tidak hadir</small></span><span class="accr"><span class="chev ${open ? 'up' : ''}">${ic('chev', 18)}</span></span></button>${open ? list.map((r, n) => `<div class="srow"><span class="sno">${n + 1}</span><div class="sinfo"><b>${esc(r.nama)}</b><small>${esc(r.nis)} · ${esc(r.ruang)}</small></div><div class="adet">${r.items.map(it => esc(itemTxt(it))).join('<br>')}</div></div>`).join('') : ''}</div>`;
+  }).join('');
 }
 
 VIEWS.dash = () => {
   const d = S.ui.dday, bm = bapMap(), js = S.data.jadwal.filter(j => j.tanggal === d);
   const fin = js.filter(j => isFin(bm, j)).length, pct = js.length ? Math.round(fin / js.length * 100) : 0;
-  const byR = new Map(); js.filter(j => !isFin(bm, j)).forEach(j => { if (!byR.has(j.ruangId)) byR.set(j.ruangId, []); byR.get(j.ruangId).push(j); });
-  const rooms = [...byR.values()], ab = absenRows(d);
+  const rooms = [...new Set(js.filter(j => !isFin(bm, j)).map(j => j.ruangId))], ab = absenRows(d);
+  const gm = new Map(); js.forEach(j => { const k = gKey(j); if (!gm.has(k)) gm.set(k, []); gm.get(k).push(j); });
+  const pg = [...gm.entries()].map(([k, list]) => ({ k, list, pend: list.filter(x => !isFin(bm, x)) })).filter(g => g.pend.length);
   const picker = `<input type="date" class="dpick" value="${esc(d)}" data-ch="dday" aria-label="Tanggal laporan">`;
   return head('Dashboard', hariTgl(d), picker) +
     `<div class="hero"><div><small>BAP final pada tanggal ini</small><h2>${fin} dari ${js.length} jadwal ruang</h2><p>${js.length ? 'Pantau ruang yang belum mengisi BAP.' : 'Belum ada ujian dijadwalkan pada tanggal ini.'}</p></div>${ring(pct)}</div>
     <div class="stats"><div class="stat"><small>BAP final</small><b>${fin}</b><i style="background:var(--ok)"></i></div><div class="stat"><small>Ruang belum final</small><b>${rooms.length}</b><i style="background:var(--coral)"></i></div><div class="stat"><small>Siswa tidak hadir</small><b>${ab.length}</b><i style="background:#F59E0B"></i></div></div>
     <h3 class="sec">Ruang yang belum mengisi BAP (${rooms.length})</h3>` +
-    (!js.length ? empty('Tidak ada jadwal ujian pada tanggal ini.') : rooms.length ? rooms.map(list => `<div class="card li col"><div class="lm"><b>${esc(list[0].ruangNama)}</b><div class="chips" style="margin:6px 0 0">${list.map(j => `<span class="chip ${bm[j.id] ? 'warn' : 'coral'}">${esc(jamLbl(j))} · ${esc(j.mapelNama)}${bm[j.id] ? ' (draf)' : ''}</span>`).join('')}</div></div></div>`).join('') : '<div class="note ok">Semua ruang sudah mengisi BAP final.</div>') +
+    (!js.length ? empty('Tidak ada jadwal ujian pada tanggal ini.') : rooms.length ? `<p class="mut" style="font-size:12px;margin:-4px 0 10px"><span class="chip coral">Belum diisi</span> <span class="chip warn">Draf</span> &nbsp;Ruang yang sudah final tidak ditampilkan.</p>` + pg.map(g => {
+    const j = g.list[0], key = 'pend:' + g.k, open = dOpen(key, true), fin = g.list.length - g.pend.length;
+    return `<div class="card grp"><button type="button" class="gh acc" data-act="dtoggle" data-v="${esc(key)}" data-d="1" aria-expanded="${open}"><span class="accl"><b>${esc(jamLbl(j))}${j.jamKe ? ' · ' : ''}${esc(j.mapelNama)}</b><small>${esc(j.jamMulai)}–${esc(j.jamSelesai)} WIB · ${fin} dari ${g.list.length} ruang sudah final</small></span><span class="accr"><span class="chip coral">${g.pend.length} ruang belum</span><span class="chev ${open ? 'up' : ''}">${ic('chev', 18)}</span></span></button>${open ? `<div class="chips pchips">${g.pend.map(x => `<span class="chip ${bm[x.id] ? 'warn' : 'coral'}">${esc(x.ruangNama)}</span>`).join('')}</div>` : ''}</div>`;
+  }).join('') : '<div class="note ok">Semua ruang sudah mengisi BAP final.</div>') +
     `<div class="li" style="margin:22px 0 10px"><h3 class="sec" style="margin:0">Laporan siswa tidak hadir (${ab.length})</h3><button class="btn ghost" data-act="dpdf" ${ab.length ? '' : 'disabled'}>${ic('download', 18)}PDF</button></div>${absenList(ab)}`;
 };
 
@@ -1211,6 +1221,10 @@ const ACT = {
   padclear: t => {
     const cv = document.querySelector('canvas.pad[data-pad="' + t.dataset.v + '"]'); if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
     S.form[t.dataset.v] = ''; S.form.dirty = true;
+  },
+  dtoggle: t => {
+    const key = t.dataset.v, cur = dOpen(key, t.dataset.d === '1'); S.ui.dopen[key] = !cur;
+    const w = $('#main .wrap'); if (w) w.innerHTML = VIEWS.dash();
   },
   kdel: t => { const F = S.form; F.kelas = F.kelas.filter(k => k !== t.dataset.v); F.dirty = true; refreshKelas(); },
   bsave: () => saveBap(false),
